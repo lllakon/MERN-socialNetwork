@@ -1,29 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+
+import { Post, TagsBlock, CommentsBlock, ErrorBlock } from '../components/index'
+import { fetchPopularPosts, fetchPosts, fetchTags } from '../redux/slices/posts'
+
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import Grid from '@mui/material/Grid'
 
-import {
-	fetchPopularPosts,
-	fetchPosts,
-	fetchTags,
-} from '../redux/slices/posts'
-
-import { Post } from '../components/Post'
-import { TagsBlock } from '../components/TagsBlock'
-import { CommentsBlock } from '../components/CommentsBlock'
-
 export const Home = () => {
 	const dispatch = useDispatch()
 	const userData = useSelector((state) => state.auth.data)
-
 	const { posts, tags } = useSelector((state) => state.posts)
 	const [sortedByPopular, setSortedByPopular] = useState(false)
-	console.log(sortedByPopular)
 
 	const isPostsLoading = posts.status === 'loading'
+	const isPostsError = posts.status === 'rejected'
 	const isTagsLoading = tags.status === 'loading'
+	const isTagsError = tags.status === 'rejected'
 
 	useEffect(() => {
 		dispatch(fetchPosts())
@@ -36,11 +30,9 @@ export const Home = () => {
 	}
 
 	const getPopularPosts = () => {
-		dispatch(fetchPopularPosts())
+		dispatch(fetchPosts('/popular'))
 		setSortedByPopular(true)
 	}
-
-	console.log(posts)
 
 	return (
 		<>
@@ -54,6 +46,12 @@ export const Home = () => {
 			</Tabs>
 			<Grid container spacing={4}>
 				<Grid xs={8} item>
+					{isPostsError && (
+						<ErrorBlock
+							errorText='Не удалось загрузить посты'
+							errorStatus={posts.error}
+						/>
+					)}
 					{(isPostsLoading ? [...Array(5)] : posts.items).map((obj, index) =>
 						isPostsLoading ? (
 							<Post key={index} isLoading={true} />
@@ -75,25 +73,6 @@ export const Home = () => {
 				</Grid>
 				<Grid xs={4} item>
 					<TagsBlock items={tags.items} isLoading={isTagsLoading} />
-					<CommentsBlock
-						items={[
-							{
-								user: {
-									fullName: 'Вася Пупкин',
-									avatarUrl: 'https://mui.com/static/images/avatar/1.jpg',
-								},
-								text: 'Это тестовый комментарий',
-							},
-							{
-								user: {
-									fullName: 'Иван Иванов',
-									avatarUrl: 'https://mui.com/static/images/avatar/2.jpg',
-								},
-								text: 'When displaying three lines or more, the avatar is not aligned at the top. You should set the prop to align the avatar at the top',
-							},
-						]}
-						isLoading={false}
-					/>
 				</Grid>
 			</Grid>
 		</>

@@ -36,14 +36,14 @@ export const getAllPopular = async (req, res) => {
 
 export const getPopularTags = async (req, res) => {
 	try {
-		const posts = await PostModel.find().exec() // .limit(15)
+		const posts = await PostModel.find().exec()
 
-		const postsFiltered = posts.map((obj) => obj.tags).flat()
-		const tagsDuplicates = filter(postsFiltered, (val, i, iteratee) =>
-			includes(iteratee, val, i + 1)
-		)
+		const postsFiltered = posts.map((obj) => obj.tags).flat().filter(Boolean)
+		const tagsDuplicates = filter(postsFiltered, (val, i, iteratee) => {
+			return includes(iteratee, val, i + 1)
+		})
 
-		const popularTags = uniq(tagsDuplicates).reverse().slice(0, 5)
+		const popularTags = uniq(tagsDuplicates).reverse().slice(0, 8)
 
 		res.json(popularTags)
 	} catch (error) {

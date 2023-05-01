@@ -201,29 +201,6 @@ export const update = async (req, res) => {
 
 // comments
 
-// export const createComment = async (req, res) => {
-// 	const comment = {
-// 		user: req.body.user,
-// 		fullName: req.body.fullName,
-// 		avatarUrl: req.body.avatarUrl,
-// 		text: req.body.text,
-// 	}
-
-// 	const postId = req.params.id
-// 	try {
-// 		const updatedPost = await PostModel.findByIdAndUpdate(
-// 			postId,
-// 			{ $push: { comments: comment } },
-// 			{ new: true }
-// 		)
-
-// 		res.json(updatedPost)
-// 	} catch (err) {
-// 		console.error(err.message)
-// 		res.status(500).send('Server Error')
-// 	}
-// }
-
 export const createComment = async (req, res) => {
 	const postId = req.params.postId
 	try {
@@ -235,25 +212,14 @@ export const createComment = async (req, res) => {
 			avatarUrl: req.body.avatarUrl,
 		})
 
-		const data = comment.save()
+		comment.save()
+		await PostModel.updateOne({ _id: postId }, { $inc: { commentsCount: 1 } })
 
 		res.json({ sucess: true })
 	} catch (error) {
 		console.error(error.message)
 		res.status(500).send('Server Error')
 	}
-	// const postId = req.params.id
-	// try {
-	// 	const updatedPost = await PostModel.findByIdAndUpdate(
-	// 		postId,
-	// 		{ $push: { comments: comment } },
-	// 		{ new: true }
-	// 	)
-	// 	res.json(updatedPost)
-	// } catch (err) {
-	// 	console.error(err.message)
-	// 	res.status(500).send('Server Error')
-	// }
 }
 
 export const getAllComments = async (req, res) => {
@@ -279,6 +245,17 @@ export const getPostComment = async (req, res) => {
 				res.send(comments)
 			}
 		})
+	} catch (error) {
+		console.error(error.message)
+		res.status(500).send('Server Error')
+	}
+}
+
+export const getPostCommentCount = async (req, res) => {
+	const postId = req.params.postId
+	try {
+		const count = await CommentModel.countDocuments({ postId })
+		res.send({ count })
 	} catch (error) {
 		console.error(error.message)
 		res.status(500).send('Server Error')

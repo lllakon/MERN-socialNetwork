@@ -1,12 +1,11 @@
-import { CommentModel } from '../models/Comments.js'
-import { PostModel } from '../models/Post.js'
+import { CommentModel, PostModel } from '../models/index.js'
 
 export const createComment = async (req, res) => {
 	const postId = req.params.postId
 	try {
 		const comment = new CommentModel({
 			text: req.body.text,
-			userId: req.body.user,
+			userId: req.body.userId,
 			postId,
 			fullName: req.body.fullName,
 			avatarUrl: req.body.avatarUrl,

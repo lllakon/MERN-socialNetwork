@@ -1,7 +1,7 @@
 import uniq from 'lodash.uniq'
 import filter from 'lodash.filter'
 import includes from 'lodash.includes'
-import { PostModel } from '../models/Post.js'
+import { PostModel } from '../models/index.js'
 
 export const getAll = async (req, res) => {
 	try {
@@ -197,4 +197,3 @@ export const update = async (req, res) => {
 		})
 	}
 }
-

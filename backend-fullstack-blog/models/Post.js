@@ -1,21 +1,4 @@
 import mongoose from 'mongoose'
-import { CommentSchema } from './Comments.js'
-
-// const CommentSchema = new mongoose.Schema(
-// 	{
-// 		text: {
-// 			type: String,
-// 			required: true,
-// 		},
-// 		user: {
-// 			type: mongoose.Schema.Types.ObjectId,
-// 			ref: 'User',
-// 			required: true,
-// 		},
-// 		fullName: String,
-// 		avatarUrl: String
-// 	}
-// )
 
 const PostSchema = new mongoose.Schema(
 	{
@@ -38,7 +21,7 @@ const PostSchema = new mongoose.Schema(
 		},
 		commentsCount: {
 			type: Number,
-			default: 0
+			default: 0,
 		},
 		user: {
 			type: mongoose.Schema.Types.ObjectId,
@@ -53,4 +36,3 @@ const PostSchema = new mongoose.Schema(
 )
 
 export const PostModel = mongoose.model('Post', PostSchema)
-// export const CommentModel = mongoose.model('Comment', CommentSchema)

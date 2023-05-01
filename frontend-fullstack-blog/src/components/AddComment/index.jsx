@@ -7,6 +7,7 @@ import styles from './AddComment.module.scss'
 import TextField from '@mui/material/TextField'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
+import { Typography } from '@mui/material'
 
 export const AddComment = ({ postId, userData, setNewComment }) => {
 	const [inputValue, setInputValue] = useState('')
@@ -18,7 +19,7 @@ export const AddComment = ({ postId, userData, setNewComment }) => {
 			fullName: userData.fullName,
 			avatarUrl: userData.avatarUrl,
 		}
-		setNewComment(prevItems => [...prevItems, newCommentData])
+		setNewComment((prevItems) => [...prevItems, newCommentData])
 
 		try {
 			await axios.patch(`/comments/${postId}`, newCommentData)
@@ -43,7 +44,12 @@ export const AddComment = ({ postId, userData, setNewComment }) => {
 						multiline
 						fullWidth
 					/>
-					<Button onClick={sendCommentHandler} variant='contained' disabled={!inputValue}>
+						<Typography color='textSecondary'>{inputValue.length}/1500</Typography>
+					<Button
+						onClick={sendCommentHandler}
+						variant='contained'
+						disabled={!inputValue || inputValue.length >= 1500}
+					>
 						Отправить
 					</Button>
 				</div>

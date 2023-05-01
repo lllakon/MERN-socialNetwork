@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import axios from '../axios'
+import axios from '../../axios'
 
-import { SideBlock } from './SideBlock'
-import { AddComment } from './AddComment'
+import { SideBlock } from '../SideBlock'
+import { Comment } from './Comment'
+import { AddComment } from '../AddComment'
 
 import ListItem from '@mui/material/ListItem'
 import ListItemAvatar from '@mui/material/ListItemAvatar'
@@ -12,6 +13,9 @@ import ListItemText from '@mui/material/ListItemText'
 import Divider from '@mui/material/Divider'
 import List from '@mui/material/List'
 import Skeleton from '@mui/material/Skeleton'
+import IconButton from '@mui/material/IconButton'
+import DeleteIcon from '@mui/icons-material/Clear'
+import clsx from 'clsx'
 
 export const CommentsBlock = ({ postId }) => {
 	const userData = useSelector((state) => state.auth.data)
@@ -32,6 +36,9 @@ export const CommentsBlock = ({ postId }) => {
 			})
 	}, [newComment])
 
+	// isEditable={userData?._id === obj.user?._id}
+	const isEditable = true
+
 	return (
 		<SideBlock title='Комментарии'>
 			<List>
@@ -51,7 +58,11 @@ export const CommentsBlock = ({ postId }) => {
 									<Skeleton variant='text' height={18} width={230} />
 								</div>
 							) : (
-								<ListItemText primary={obj.fullName} secondary={obj.text} />
+								<Comment
+									isEditable={isEditable}
+									fullName={obj.fullName}
+									text={obj.text}
+								/>
 							)}
 						</ListItem>
 						<Divider variant='inset' component='li' />
@@ -59,7 +70,11 @@ export const CommentsBlock = ({ postId }) => {
 				))}
 			</List>
 			{userData ? (
-				<AddComment postId={postId} userData={userData} setNewComment={setNewComment} />
+				<AddComment
+					postId={postId}
+					userData={userData}
+					setNewComment={setNewComment}
+				/>
 			) : (
 				<p style={{ textAlign: 'center', padding: '30px 0 45px 0' }}>
 					Войдите или зарегестрируйтесь чтобы оставлять комментарии

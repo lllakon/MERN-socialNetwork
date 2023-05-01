@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { Link } from 'react-router-dom'
 
 import List from '@mui/material/List'
@@ -11,7 +11,7 @@ import Skeleton from '@mui/material/Skeleton'
 
 import { SideBlock } from './SideBlock'
 
-export const TagsBlock = ({ items, isLoading = true }) => {
+export const TagsBlock = memo(({ items, isLoading = true }) => {
 	return (
 		<SideBlock title='Популярные теги'>
 			<List>
@@ -37,4 +37,4 @@ export const TagsBlock = ({ items, isLoading = true }) => {
 			</List>
 		</SideBlock>
 	)
-}
+})

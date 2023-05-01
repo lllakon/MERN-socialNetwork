@@ -18,6 +18,7 @@ export const TagsBlock = memo(({ items, isLoading = true }) => {
 			<List>
 				{(isLoading ? [...Array(5)] : items).map((name, i) => (
 					<Link
+						key={i}
 						style={{ textDecoration: 'none', color: 'black' }}
 						to={`/tags/${name}`}
 					>

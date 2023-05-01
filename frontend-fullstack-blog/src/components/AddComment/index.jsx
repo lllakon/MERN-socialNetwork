@@ -43,7 +43,7 @@ export const AddComment = ({ postId, userData, setNewComment }) => {
 						multiline
 						fullWidth
 					/>
-					<Button onClick={sendCommentHandler} variant='contained'>
+					<Button onClick={sendCommentHandler} variant='contained' disabled={!inputValue}>
 						Отправить
 					</Button>
 				</div>

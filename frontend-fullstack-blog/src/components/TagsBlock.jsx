@@ -12,6 +12,7 @@ import Skeleton from '@mui/material/Skeleton'
 import { SideBlock } from './SideBlock'
 
 export const TagsBlock = memo(({ items, isLoading = true }) => {
+	console.log('TAGS:', items)
 	return (
 		<SideBlock title='Популярные теги'>
 			<List>

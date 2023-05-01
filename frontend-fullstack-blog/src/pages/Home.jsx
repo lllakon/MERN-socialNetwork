@@ -34,7 +34,7 @@ export const Home = () => {
 		dispatch(fetchPosts('/popular'))
 		setSortedBy('popular')
 	}
-
+	
 	return (
 		<>
 			<Tabs

@@ -32,8 +32,6 @@ export const CommentsBlock = ({ postId }) => {
 			})
 	}, [newComment])
 
-	// isEditable={userData?._id === obj.user?._id}
-
 	return (
 		<SideBlock title='Комментарии'>
 			<List>

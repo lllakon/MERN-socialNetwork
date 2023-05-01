@@ -16,7 +16,7 @@ import { UserInfo } from '../UserInfo'
 import { PostSkeleton } from './Skeleton'
 
 export const Post = ({
-	id,
+	_id,
 	title,
 	createdAt,
 	imageUrl,
@@ -38,7 +38,7 @@ export const Post = ({
 
 	const onClickRemove = async () => {
 		if (window.confirm('Удалить статью?')) {
-			await dispatch(fetchRemovePost(id))
+			await dispatch(fetchRemovePost(_id))
 			navigate('/')
 		}
 	}
@@ -47,7 +47,7 @@ export const Post = ({
 		<div className={clsx(styles.root, { [styles.rootFull]: isFullPost })}>
 			{isEditable && (
 				<div className={styles.editButtons}>
-					<Link to={`/posts/${id}/edit`}>
+					<Link to={`/posts/${_id}/edit`}>
 						<IconButton color='primary'>
 							<EditIcon />
 						</IconButton>
@@ -65,7 +65,7 @@ export const Post = ({
 						alt={title}
 					/>
 				) : (
-					<Link to={`/posts/${id}`}>
+					<Link to={`/posts/${_id}`}>
 						<img
 							className={clsx(styles.image, { [styles.imageFull]: isFullPost })}
 							src={imageUrl}
@@ -77,7 +77,7 @@ export const Post = ({
 				<UserInfo {...user} additionalText={createdAt} />
 				<div className={styles.indention}>
 					<h2 className={clsx(styles.title, { [styles.titleFull]: isFullPost })}>
-						{isFullPost ? title : <Link to={`/posts/${id}`}>{title}</Link>}
+						{isFullPost ? title : <Link to={`/posts/${_id}`}>{title}</Link>}
 					</h2>
 					<ul className={styles.tags}>
 						{tags.map((name) => (

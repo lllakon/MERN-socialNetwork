@@ -12,7 +12,7 @@ export const Home = () => {
 	const dispatch = useDispatch()
 	const userData = useSelector((state) => state.auth.data)
 	const { posts, tags } = useSelector((state) => state.posts)
-	const [sortedByPopular, setSortedByPopular] = useState(false)
+	const [sortedBy, setSortedBy] = useState('')
 
 	const isPostsLoading = posts.status === 'loading'
 	const isPostsError = posts.status === 'rejected'
@@ -24,20 +24,22 @@ export const Home = () => {
 	}, [])
 
 	const getNewPosts = () => {
+		if (sortedBy === 'new') return
 		dispatch(fetchPosts())
-		setSortedByPopular(false)
+		setSortedBy('new')
 	}
 
 	const getPopularPosts = () => {
+		if (sortedBy === 'popular') return
 		dispatch(fetchPosts('/popular'))
-		setSortedByPopular(true)
+		setSortedBy('popular')
 	}
 
 	return (
 		<>
 			<Tabs
 				style={{ marginBottom: 15 }}
-				value={sortedByPopular ? 1 : 0}
+				value={sortedBy === 'popular' ? 1 : 0}
 				aria-label='basic tabs example'
 			>
 				<Tab label='Новые' onClick={getNewPosts} />

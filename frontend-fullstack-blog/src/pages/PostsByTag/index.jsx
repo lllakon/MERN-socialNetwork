@@ -22,6 +22,9 @@ export const PostsByTag = () => {
 
 	useEffect(() => {
 		dispatch(fetchTags())
+	}, [])
+
+	useEffect(() => {
 		setPostsLoading(true)
 		const data = axios
 			.get(location.pathname)
@@ -31,16 +34,13 @@ export const PostsByTag = () => {
 			})
 			.catch((error) => {
 				console.warn(error)
-				alert('Не удалось найти статьи с таким тегом')
 				navigate('/')
 			})
 	}, [location])
 
 	return (
 		<>
-			<h2>
-				Статьи по тегу: {location.pathname.replace('/tags/', '')}
-			</h2>
+			<h2>Статьи по тегу: {location.pathname.replace('/tags/', '')}</h2>
 			<Grid container spacing={4}>
 				<Grid xs={8} item>
 					{(postsLoading ? [...Array(5)] : posts).map((obj, index) =>
@@ -49,14 +49,8 @@ export const PostsByTag = () => {
 						) : (
 							<Post
 								key={obj._id}
-								id={obj._id}
-								title={obj.title}
+								{...obj}
 								imageUrl={obj.imageUrl && `http://localhost:4444${obj.imageUrl}`}
-								user={obj.user}
-								createdAt={obj.createdAt}
-								viewsCount={obj.viewsCount}
-								commentsCount={3}
-								tags={obj.tags}
 								isEditable={userData?._id === obj.user?._id}
 							/>
 						)

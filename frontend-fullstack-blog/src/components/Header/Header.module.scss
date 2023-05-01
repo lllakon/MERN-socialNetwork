@@ -21,6 +21,8 @@
   padding: 0 10px;
   text-decoration: none;
 
+	transition: background-color .1s ease-in-out;
+
   &:hover {
     background-color: #4361ee;
   }

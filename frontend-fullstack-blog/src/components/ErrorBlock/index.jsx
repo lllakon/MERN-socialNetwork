@@ -6,17 +6,17 @@ import errorImage from './errorImage.svg'
 
 export const ErrorBlock = ({ errorText, errorStatus, fullPage }) => {
 	return (
-		<div className={styles.errorWrapper}>
+		<div className={`${styles.errorWrapper} ${fullPage && styles.verticalCenter}`}>
 			<div>
 				<h2>{errorText}</h2>
 				<p>{errorStatus}</p>
 
 				{fullPage && (
-				<>
+					<>
 					<img src={errorImage} />
-					<Link to='/'>Вернуться на главную страницу</Link>
-				</>
-			)}
+					<Link to='/'>Вернуться на главную</Link>
+					</>
+				)}
 			</div>
 		</div>
 	)

@@ -36,11 +36,7 @@ export const FullPost = () => {
 		return <Post isLoading={isLoading} isFullPost />
 	}
 	if (error) {
-		return (
-			<div style={{ height: '80vh' }}>
-				<ErrorBlock errorText='Что-то пошло не так 😥' fullPage />
-			</div>
-		)
+		return <ErrorBlock errorText='Что-то пошло не так 😥' fullPage />
 	}
 
 	return (

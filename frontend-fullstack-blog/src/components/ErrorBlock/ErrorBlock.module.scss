@@ -16,9 +16,38 @@
 		text-align: center;
 	}
 
+	img {
+		display: flex;
+		margin: 0 auto;
+		width: 300px;
+	}
+
 	h2 {
 		text-align: center;
 		font-weight: 500;
 		font-size: 21px;
 	}
+
+	a {
+		padding: 15px;
+		background-color: black;
+		border-radius: 20px;
+
+		background-color: black;
+		color: #fff;
+		font-weight: 700;
+		line-height: 35px;
+		text-transform: uppercase;
+		border-radius: 5px;
+		text-decoration: none;
+
+		transition: background-color .1s ease-in-out;
+		&:hover {
+			background-color: #4361ee;
+		}
+	}
+}
+
+.verticalCenter {
+	height: 80vh;
 }

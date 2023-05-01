@@ -12,7 +12,11 @@ import {
 import handleValidationErrors from './utils/handleValidationErrors.js'
 import checkAuth from './middleware/checkAuth.js'
 
-import { UserController, PostController } from './controllers/index.js'
+import {
+	UserController,
+	PostController,
+	CommentController,
+} from './controllers/index.js'
 
 mongoose
 	.connect(
@@ -85,19 +89,9 @@ app.patch(
 // 	checkAuth,
 // 	PostController.createComment
 // )
-app.patch(
-	'/comments/:postId',
-	PostController.createComment
-)
-app.get(
-	'/comments',
-	PostController.getAllComments
-)
-app.get(
-	'/comments/:postId',
-	PostController.getPostComment
-)
-
+app.patch('/comments/:postId', CommentController.createComment)
+app.get('/comments', CommentController.getAllComments)
+app.get('/comments/:postId', CommentController.getPostComment)
 
 app.listen(4444, (err) => {
 	if (err) {

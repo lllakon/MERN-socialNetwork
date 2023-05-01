@@ -9,13 +9,9 @@ import { AddComment } from '../AddComment'
 import ListItem from '@mui/material/ListItem'
 import ListItemAvatar from '@mui/material/ListItemAvatar'
 import Avatar from '@mui/material/Avatar'
-import ListItemText from '@mui/material/ListItemText'
 import Divider from '@mui/material/Divider'
 import List from '@mui/material/List'
 import Skeleton from '@mui/material/Skeleton'
-import IconButton from '@mui/material/IconButton'
-import DeleteIcon from '@mui/icons-material/Clear'
-import clsx from 'clsx'
 
 export const CommentsBlock = ({ postId }) => {
 	const userData = useSelector((state) => state.auth.data)
@@ -37,7 +33,6 @@ export const CommentsBlock = ({ postId }) => {
 	}, [newComment])
 
 	// isEditable={userData?._id === obj.user?._id}
-	const isEditable = true
 
 	return (
 		<SideBlock title='Комментарии'>
@@ -59,7 +54,7 @@ export const CommentsBlock = ({ postId }) => {
 								</div>
 							) : (
 								<Comment
-									isEditable={isEditable}
+									isEditable={userData?._id === obj.userId}
 									fullName={obj.fullName}
 									text={obj.text}
 								/>

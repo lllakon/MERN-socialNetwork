@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Post, TagsBlock, CommentsBlock, ErrorBlock } from '../components/index'
-import { fetchPopularPosts, fetchPosts, fetchTags } from '../redux/slices/posts'
+import { Post, TagsBlock, ErrorBlock } from '../components/index'
+import { fetchPosts, fetchTags } from '../redux/slices/posts'
 
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
@@ -16,8 +16,7 @@ export const Home = () => {
 
 	const isPostsLoading = posts.status === 'loading'
 	const isPostsError = posts.status === 'rejected'
-	const isTagsLoading = tags.status === 'loading'
-	const isTagsError = tags.status === 'rejected'
+	const isTagsLoading = tags.status === 'loading' || tags.status === 'rejected'
 
 	useEffect(() => {
 		dispatch(fetchPosts())

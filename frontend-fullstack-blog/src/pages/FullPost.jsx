@@ -8,6 +8,7 @@ import { Post } from '../components/Post'
 import { AddComment } from '../components/AddComment'
 import { CommentsBlock } from '../components/CommentsBlock'
 import { Typography } from '@mui/material'
+import { ErrorBlock } from '../components'
 
 export const FullPost = () => {
 	const userData = useSelector((state) => state.auth.data)
@@ -15,6 +16,7 @@ export const FullPost = () => {
 	const [isLoading, setLoading] = useState(true)
 	const { id } = useParams()
 	const [commentsSent, setCommentSent] = useState(false)
+	const [error, setError] = useState(false)
 
 	useEffect(() => {
 		axios
@@ -24,13 +26,21 @@ export const FullPost = () => {
 				setLoading(false)
 			})
 			.catch((err) => {
-				console.log(err)
-				alert('Ошибка получения статьи')
+				console.error(err)
+				setError(true)
+				setLoading(false)
 			})
 	}, [commentsSent])
 
 	if (isLoading) {
 		return <Post isLoading={isLoading} isFullPost />
+	}
+	if (error) {
+		return (
+			<div style={{ height: '80vh' }}>
+				<ErrorBlock errorText='Что-то пошло не так 😥' fullPage />
+			</div>
+		)
 	}
 
 	return (

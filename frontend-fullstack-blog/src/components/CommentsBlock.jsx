@@ -16,7 +16,6 @@ export const CommentsBlock = ({ postId }) => {
 	const userData = useSelector((state) => state.auth.data)
 	const [isLoading, setLoading] = useState(true)
 	const [comments, setComments] = useState([])
-	console.log(comments)
 
 	useEffect(() => {
 		axios

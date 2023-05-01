@@ -30,7 +30,7 @@ function App() {
 					<Route path='/login' element={<Login />} />
 					<Route path='/register' element={<Registration />} />
 
-					<Route path='*' element={<ErrorBlock />} />
+					<Route path='*' element={<ErrorBlock errorText="Такой страницы не существует" fullPage />} />
 				</Routes>
 			</Container>
 		</>

@@ -14,9 +14,14 @@ export const fetchPosts = createAsyncThunk(
 	}
 )
 
-export const fetchTags = createAsyncThunk('posts/fetchTags', async () => {
-	const { data } = await axios.get('/tags')
-	return data
+export const fetchTags = createAsyncThunk('posts/fetchTags', async (_, { rejectWithValue }) => {
+	try {
+		const { data } = await axios.get('/tags')
+		return data
+	} catch (error) {
+		console.error(error)
+		return rejectWithValue(error.message)
+	}
 })
 
 export const fetchRemovePost = createAsyncThunk(

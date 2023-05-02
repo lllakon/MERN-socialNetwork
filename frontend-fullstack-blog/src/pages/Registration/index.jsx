@@ -4,12 +4,9 @@ import { Navigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 
 import { fetchRegister, selectIsAuth } from '../../redux/slices/auth'
+import { authErrorsHandler } from '../../helpers/authErrorsHandler'
 
-import Typography from '@mui/material/Typography'
-import TextField from '@mui/material/TextField'
-import Paper from '@mui/material/Paper'
-import Button from '@mui/material/Button'
-import Avatar from '@mui/material/Avatar'
+import { Typography, TextField, Paper, Button, Avatar } from '@mui/material'
 import styles from './Login.module.scss'
 
 export const Registration = () => {
@@ -21,23 +18,16 @@ export const Registration = () => {
 		formState: { errors, isValid },
 	} = useForm({
 		defaultValues: {
-			fullName: 'Вася',
-			email: 'vasya@test.ru',
-			password: '1234',
+			fullName: '',
+			email: '',
+			password: '',
 		},
 		mode: 'onChange',
 	})
-	
+
 	const onSubmit = async (values) => {
 		const data = await dispatch(fetchRegister(values))
-
-		if (!data.payload) {
-			return alert('Не удалось зарегистрироваться')
-		}
-
-		if ('token' in data.payload) {
-			window.localStorage.setItem('token', data.payload.token)
-		}
+		authErrorsHandler(data)
 	}
 
 	if (isAuth) {
@@ -81,7 +71,7 @@ export const Registration = () => {
 						},
 						maxLength: {
 							value: 20,
-							message: "Пароль не должен содержать более 20 символов"
+							message: 'Пароль не должен содержать более 20 символов',
 						},
 					})}
 					className={styles.field}

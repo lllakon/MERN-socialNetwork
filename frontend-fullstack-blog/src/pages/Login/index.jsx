@@ -5,11 +5,9 @@ import { useForm } from 'react-hook-form'
 
 import { fetchLogin, selectIsAuth } from '../../redux/slices/auth'
 
-import Typography from '@mui/material/Typography'
-import TextField from '@mui/material/TextField'
-import Paper from '@mui/material/Paper'
-import Button from '@mui/material/Button'
+import { Typography, TextField, Paper, Button } from '@mui/material'
 import styles from './Login.module.scss'
+import { authErrorsHandler } from '../../helpers/authErrorsHandler'
 
 export const Login = () => {
 	const dispatch = useDispatch()
@@ -28,14 +26,7 @@ export const Login = () => {
 
 	const onSubmit = async (values) => {
 		const data = await dispatch(fetchLogin(values))
-
-		if(!data.payload) {
-			return alert('Не удалось авторизоваться')
-		}
-
-		if ('token' in data.payload) {
-			window.localStorage.setItem('token', data.payload.token)
-		}
+		authErrorsHandler(data)
 	}
 
 	if (isAuth) {

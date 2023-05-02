@@ -50,7 +50,7 @@ export const Home = () => {
 					{isPostsError && (
 						<ErrorBlock
 							errorText='Не удалось загрузить посты'
-							errorStatus={posts.error}
+							errorStatus={posts.status}
 						/>
 					)}
 					{(isPostsLoading ? [...Array(5)] : posts.items).map((obj, index) =>

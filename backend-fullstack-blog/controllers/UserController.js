@@ -35,10 +35,17 @@ export const register = async (req, res) => {
 			token,
 		})
 	} catch (error) {
-		console.log(error)
-		res.status(500).json({
-			message: 'Не удалось зарегестрироваться',
-		})
+		if (error.code === 11000) {
+			console.log(error)
+			res.status(409).json({
+				message: 'Такой email уже зарегистрирован',
+			})
+		} else {
+			console.log(error)
+			res.status(500).json({
+				message: 'Не удалось зарегестрироваться',
+			})
+		}
 	}
 }
 
@@ -48,7 +55,7 @@ export const login = async (req, res) => {
 
 		if (!user) {
 			return res.status(400).json({
-				message: 'Пользователь не найден', // Неверный логин или пароль !!!
+				message: 'Неверный логин или пароль',
 			})
 		}
 

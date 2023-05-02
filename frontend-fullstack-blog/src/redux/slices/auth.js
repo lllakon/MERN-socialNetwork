@@ -1,16 +1,27 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from '../../axios'
 
-export const fetchLogin = createAsyncThunk('auth/fetchLogin', async (params) => {
-	const { data } = await axios.post('/auth/login', params)
-	return data
-})
+export const fetchLogin = createAsyncThunk(
+	'auth/fetchLogin',
+	async (params, { rejectWithValue }) => {
+		try {
+			const { data } = await axios.post('/auth/login', params)
+			return data
+		} catch (error) {
+			return rejectWithValue(error.response.data.message)
+		}
+	}
+)
 
 export const fetchRegister = createAsyncThunk(
 	'auth/fetchRegister',
-	async (params) => {
-		const { data } = await axios.post('/auth/register', params)
-		return data
+	async (params, { rejectWithValue }) => {
+		try {
+			const { data } = await axios.post('/auth/register', params)
+			return data
+		} catch (error) {
+			return rejectWithValue(error.response.data.message)
+		}
 	}
 )
 
@@ -21,7 +32,7 @@ export const fetchLoginMe = createAsyncThunk('auth/fetchLoginMe', async () => {
 
 const initialState = {
 	data: null,
-	status: 'loading',
+	status: null,
 }
 
 const authSlice = createSlice({
@@ -40,11 +51,11 @@ const authSlice = createSlice({
 		},
 		[fetchLogin.fulfilled]: (state, action) => {
 			state.data = action.payload
-			state.status = 'loaded'
+			state.status = 'resolved'
 		},
 		[fetchLogin.rejected]: (state) => {
 			state.status = null
-			state.status = 'error'
+			state.status = 'rejected'
 		},
 		// Registration
 		[fetchRegister.pending]: (state) => {
@@ -53,11 +64,11 @@ const authSlice = createSlice({
 		},
 		[fetchRegister.fulfilled]: (state, action) => {
 			state.data = action.payload
-			state.status = 'loaded'
+			state.status = 'resolved'
 		},
 		[fetchRegister.rejected]: (state) => {
 			state.status = null
-			state.status = 'error'
+			state.status = 'rejected'
 		},
 		// Get account data
 		[fetchLoginMe.pending]: (state) => {
@@ -66,11 +77,11 @@ const authSlice = createSlice({
 		},
 		[fetchLoginMe.fulfilled]: (state, action) => {
 			state.data = action.payload
-			state.status = 'loaded'
+			state.status = 'resolved'
 		},
 		[fetchLoginMe.rejected]: (state) => {
 			state.status = null
-			state.status = 'error'
+			state.status = 'rejected'
 		},
 	},
 })

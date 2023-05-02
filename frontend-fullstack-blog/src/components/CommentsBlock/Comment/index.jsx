@@ -1,14 +1,27 @@
 import React from 'react'
+import axios from '../../../axios'
+
 import { IconButton, ListItemText } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Clear'
-
 import styles from './Comment.module.scss'
 
-export const Comment = ({ isEditable, fullName, text }) => {
+export const Comment = ({
+	postId,
+	commentId,
+	setRemovedComment,
+	isEditable,
+	fullName,
+	text,
+}) => {
 	const onClickRemove = async () => {
 		if (window.confirm('Удалить комментарий?')) {
-			// await dispatch(fetchRemovePost(_id))
-			console.log('Удаление комментария')
+			try {
+				await axios.delete(`/comments/${postId}/${commentId}`)
+				setRemovedComment((prevItems) => [...prevItems, commentId])
+			} catch (error) {
+				console.warn(error)
+				alert('Не удалось удалить комментарий')
+			}
 		}
 	}
 

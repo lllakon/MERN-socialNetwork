@@ -16,8 +16,10 @@ import Skeleton from '@mui/material/Skeleton'
 export const CommentsBlock = ({ postId }) => {
 	const userData = useSelector((state) => state.auth.data)
 	const [isLoading, setLoading] = useState(true)
+	
 	const [comments, setComments] = useState([])
 	const [newComment, setNewComment] = useState([])
+	const [removedComment, setRemovedComment] = useState([])
 
 	useEffect(() => {
 		axios
@@ -30,7 +32,7 @@ export const CommentsBlock = ({ postId }) => {
 				console.log(err)
 				alert('Ошибка получения комментариев')
 			})
-	}, [newComment])
+	}, [newComment, removedComment])
 
 	return (
 		<SideBlock title='Комментарии'>
@@ -52,6 +54,9 @@ export const CommentsBlock = ({ postId }) => {
 								</div>
 							) : (
 								<Comment
+									postId={postId}
+									commentId={obj._id}
+									setRemovedComment={setRemovedComment}
 									isEditable={userData?._id === obj.userId}
 									fullName={obj.fullName}
 									text={obj.text}

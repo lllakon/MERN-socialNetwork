@@ -95,6 +95,7 @@ app.get('/comments/:postId', CommentController.getPostComment)
 
 //Comments: actions
 app.patch('/comments/:postId', CommentController.createComment)
+app.delete('/comments/:postId/:commentId', CommentController.removeComment)
 
 app.listen(4444, (err) => {
 	if (err) {

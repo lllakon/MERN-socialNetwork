@@ -21,6 +21,7 @@ export const createComment = async (req, res) => {
 	}
 }
 
+//
 export const getAllComments = async (req, res) => {
 	try {
 		CommentModel.find((err, comments) => {
@@ -32,21 +33,17 @@ export const getAllComments = async (req, res) => {
 		res.status(500).send('Server Error')
 	}
 }
+//
 
 export const getPostComment = async (req, res) => {
 	const postId = req.params.postId
 	try {
 		CommentModel.find({ postId }, (err, comments) => {
-			if (err) {
-				console.error(err)
-				res.status(500).send('Ошибка при поиске комментариев')
-			} else {
-				res.send(comments)
-			}
+			res.send(comments)
 		})
 	} catch (error) {
-		console.error(error.message)
-		res.status(500).send('Server Error')
+		console.error(error)
+		res.status(500).send('Ошибка при поиске комментариев')
 	}
 }
 

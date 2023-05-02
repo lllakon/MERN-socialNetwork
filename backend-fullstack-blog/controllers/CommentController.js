@@ -21,6 +21,27 @@ export const createComment = async (req, res) => {
 	}
 }
 
+// export const removeComment = async (req, res) => {
+// 	const postId = req.params.postId
+// 	try {
+// 		const comment = new CommentModel({
+// 			text: req.body.text,
+// 			userId: req.body.userId,
+// 			postId,
+// 			fullName: req.body.fullName,
+// 			avatarUrl: req.body.avatarUrl,
+// 		})
+
+// 		comment.save()
+// 		await PostModel.updateOne({ _id: postId }, { $inc: { commentsCount: 1 } })
+
+// 		res.json({ sucess: true })
+// 	} catch (error) {
+// 		console.error(error.message)
+// 		res.status(500).send('Server Error')
+// 	}
+// }
+
 //
 export const getAllComments = async (req, res) => {
 	try {

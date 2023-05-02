@@ -42,6 +42,7 @@ app.use(express.json())
 app.use(cors())
 app.use('/uploads', express.static('uploads'))
 
+// Auth
 app.post(
 	'/auth/login',
 	loginValidation,
@@ -56,42 +57,44 @@ app.post(
 )
 app.get('/auth/me', checkAuth, UserController.getMe)
 
-app.post('/upload', checkAuth, upload.single('image'), (req, res) => {
-	res.json({
-		url: `/uploads/${req.file.originalname}`,
-	})
-})
-
-app.get('/tags', PostController.getPopularTags)
-
-app.get('/posts', PostController.getAll)
-app.get('/posts/popular', PostController.getAllPopular)
-app.get('/posts/tags', PostController.getPopularTags)
+// Post: get
+app.get('/posts', PostController.getAllPosts)
+app.get('/posts/popular', PostController.getAllPopularPosts)
+app.get('/posts/:id', PostController.getOnePost)
 app.get('/tags/:id', PostController.getPostsByTag)
-app.get('/posts/:id', PostController.getOne)
+
+// Post: actions
 app.post(
 	'/posts',
 	checkAuth,
 	postCreateValidation,
 	handleValidationErrors,
-	PostController.create
+	PostController.createPost
 )
-app.delete('/posts/:id', checkAuth, PostController.remove)
 app.patch(
 	'/posts/:id',
 	checkAuth,
 	postCreateValidation,
 	handleValidationErrors,
-	PostController.update
+	PostController.updatePost
 )
-// app.patch(
-// 	'/comments/:id',
-// 	checkAuth,
-// 	PostController.createComment
-// )
-app.patch('/comments/:postId', CommentController.createComment)
+app.post('/upload', checkAuth, upload.single('image'), (req, res) => {
+	res.json({
+		url: `/uploads/${req.file.originalname}`,
+	})
+})
+app.delete('/posts/:id', checkAuth, PostController.removePost)
+
+// Tags: get
+app.get('/tags', PostController.getPopularTags)
+app.get('/posts/tags', PostController.getPopularTags)
+
+// Comments: get
 app.get('/comments', CommentController.getAllComments)
 app.get('/comments/:postId', CommentController.getPostComment)
+
+//Comments: actions
+app.patch('/comments/:postId', CommentController.createComment)
 
 app.listen(4444, (err) => {
 	if (err) {

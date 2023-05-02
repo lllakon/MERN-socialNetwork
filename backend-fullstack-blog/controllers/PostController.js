@@ -3,7 +3,7 @@ import filter from 'lodash.filter'
 import includes from 'lodash.includes'
 import { PostModel } from '../models/index.js'
 
-export const getAll = async (req, res) => {
+export const getAllPosts = async (req, res) => {
 	try {
 		const posts = await PostModel.find()
 			.populate({ path: 'user', select: ['user', 'avatarUrl', 'fullName'] })
@@ -18,7 +18,7 @@ export const getAll = async (req, res) => {
 	}
 }
 
-export const getAllPopular = async (req, res) => {
+export const getAllPopularPosts = async (req, res) => {
 	try {
 		const posts = await PostModel.find()
 			.populate('user')
@@ -74,7 +74,7 @@ export const getPostsByTag = async (req, res) => {
 	}
 }
 
-export const getOne = async (req, res) => {
+export const getOnePost = async (req, res) => {
 	try {
 		const postId = req.params.id
 
@@ -113,7 +113,7 @@ export const getOne = async (req, res) => {
 	}
 }
 
-export const remove = async (req, res) => {
+export const removePost = async (req, res) => {
 	try {
 		const postId = req.params.id
 
@@ -149,7 +149,7 @@ export const remove = async (req, res) => {
 	}
 }
 
-export const create = async (req, res) => {
+export const createPost = async (req, res) => {
 	try {
 		const doc = new PostModel({
 			title: req.body.title,
@@ -170,7 +170,7 @@ export const create = async (req, res) => {
 	}
 }
 
-export const update = async (req, res) => {
+export const updatePost = async (req, res) => {
 	try {
 		const postId = req.params.id
 

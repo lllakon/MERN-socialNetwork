@@ -6,17 +6,19 @@ import { SideBlock } from '../SideBlock'
 import { Comment } from './Comment'
 import { AddComment } from '../AddComment'
 
-import ListItem from '@mui/material/ListItem'
-import ListItemAvatar from '@mui/material/ListItemAvatar'
-import Avatar from '@mui/material/Avatar'
-import Divider from '@mui/material/Divider'
-import List from '@mui/material/List'
-import Skeleton from '@mui/material/Skeleton'
+import {
+	ListItem,
+	ListItemAvatar,
+	Avatar,
+	Divider,
+	List,
+	Skeleton,
+} from '@mui/material'
 
 export const CommentsBlock = ({ postId }) => {
 	const userData = useSelector((state) => state.auth.data)
 	const [isLoading, setLoading] = useState(true)
-	
+
 	const [comments, setComments] = useState([])
 	const [newComment, setNewComment] = useState([])
 	const [removedComment, setRemovedComment] = useState([])

@@ -10,7 +10,6 @@ export const SideBlock = ({ title, children }) => {
 				{title}
 			</Typography>
 			{children}
-			{console.log(children)}
 		</Paper>
 	)
 }

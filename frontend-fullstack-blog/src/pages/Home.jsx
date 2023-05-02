@@ -34,7 +34,7 @@ export const Home = () => {
 		dispatch(fetchPosts('/popular'))
 		setSortedBy('popular')
 	}
-	
+
 	return (
 		<>
 			<Tabs
@@ -50,7 +50,7 @@ export const Home = () => {
 					{isPostsError && (
 						<ErrorBlock
 							errorText='Не удалось загрузить посты'
-							errorStatus={posts.status}
+							errorStatus={posts.error}
 						/>
 					)}
 					{(isPostsLoading ? [...Array(5)] : posts.items).map((obj, index) =>

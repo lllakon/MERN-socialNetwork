@@ -14,19 +14,25 @@ export const fetchPosts = createAsyncThunk(
 	}
 )
 
-export const fetchTags = createAsyncThunk('posts/fetchTags', async (_, { rejectWithValue }) => {
-	try {
-		const { data } = await axios.get('/tags')
-		return data
-	} catch (error) {
-		console.error(error)
-		return rejectWithValue(error.message)
+export const fetchTags = createAsyncThunk(
+	'posts/fetchTags',
+	async (_, { rejectWithValue }) => {
+		try {
+			const { data } = await axios.get('/tags')
+			return data
+		} catch (error) {
+			console.error(error)
+			return rejectWithValue(error.message)
+		}
 	}
-})
+)
 
 export const fetchRemovePost = createAsyncThunk(
 	'posts/fetchRemovePost',
-	async (id) => axios.delete(`/posts/${id}`)
+	async (id) => {
+		axios.delete(`/posts/${id}`)
+		return null
+	}
 )
 
 const initialState = {

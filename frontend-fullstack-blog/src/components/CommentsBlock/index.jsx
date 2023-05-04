@@ -2,9 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import axios from '../../axios'
 
-import { SideBlock } from '../SideBlock'
-import { Comment } from './Comment'
-import { AddComment } from '../AddComment'
+import { SideBlock, Comment, AddComment } from '../index'
 
 import {
 	ListItem,
@@ -77,7 +75,7 @@ export const CommentsBlock = ({ postId }) => {
 				/>
 			) : (
 				<p style={{ textAlign: 'center', padding: '30px 0 45px 0' }}>
-					Войдите или зарегестрируйтесь чтобы оставлять комментарии
+					Войдите или зарегистрируйтесь чтобы оставлять комментарии
 				</p>
 			)}
 		</SideBlock>

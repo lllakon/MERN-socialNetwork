@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import axios from '../../axios'
+import React, { useState } from 'react'
+import axios from '../../../axios'
 
 import styles from './AddComment.module.scss'
 
@@ -44,7 +43,7 @@ export const AddComment = ({ postId, userData, setNewComment }) => {
 						multiline
 						fullWidth
 					/>
-						<Typography color='textSecondary'>{inputValue.length}/1500</Typography>
+					<Typography color='textSecondary'>{inputValue.length}/1500</Typography>
 					<Button
 						onClick={sendCommentHandler}
 						variant='contained'

@@ -1,12 +1,15 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import Button from '@mui/material/Button'
-
 import { useDispatch, useSelector } from 'react-redux'
+
 import { logout, selectIsAuth } from '../../redux/slices/auth'
 
-import Container from '@mui/material/Container'
+import { Container, Button } from '@mui/material'
 import styles from './Header.module.scss'
+
+import newPostIcon from './img/newPost.svg'
+import userIcon from './img/user.svg'
+import logoutIcon from './img/logout.svg'
 
 export const Header = () => {
 	const dispatch = useDispatch()
@@ -26,27 +29,41 @@ export const Header = () => {
 					<Link className={styles.logo} to='/'>
 						<div>React blog</div>
 					</Link>
-					<div className={styles.buttons}>
-						{isAuth ? (
-							<>
-								<Link to='/add-post'>
-									<Button variant='contained'>Написать статью</Button>
-								</Link>
-								<Button onClick={onClickLogout} variant='contained' color='error'>
-									Выйти
-								</Button>
-							</>
-						) : (
-							<>
-								<Link to='/login'>
-									<Button variant='outlined'>Войти</Button>
-								</Link>
-								<Link to='/register'>
-									<Button variant='contained'>Создать аккаунт</Button>
-								</Link>
-							</>
-						)}
-					</div>
+					{isAuth ? (
+						<div className={styles.buttons}>
+							<Link to='/add-post'>
+								<img
+									className={styles.addPostIcon}
+									src={newPostIcon}
+									alt='Написать статью'
+								/>
+							</Link>
+							<button>
+								<img
+									className={styles.userIcon}
+									src={userIcon}
+									alt='Личный кабинет'
+								/>
+							</button>
+							<button>
+								<img
+									className={styles.logoutIcon}
+									src={logoutIcon}
+									alt='Выйти'
+									onClick={onClickLogout}
+								/>
+							</button>
+						</div>
+					) : (
+						<div className={styles.loginButtons}>
+							<Link to='/login'>
+								<Button variant='outlined'>Войти</Button>
+							</Link>
+							<Link to='/register'>
+								<Button variant='contained'>Создать аккаунт</Button>
+							</Link>
+						</div>
+					)}
 				</div>
 			</Container>
 		</div>

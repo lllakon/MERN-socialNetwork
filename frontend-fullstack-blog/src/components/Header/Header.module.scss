@@ -3,15 +3,17 @@
   padding: 10px 0;
   border-bottom: 1px solid #e0e0e0;
   margin-bottom: 30px;
+	 
+	align-items: center;
 }
 
 .inner {
-  display: flex;
+	display: flex;
   justify-content: space-between;
 }
 
 .logo {
-  background-color: black;
+	background-color: black;
   color: #fff;
   font-weight: 700;
   line-height: 35px;
@@ -20,20 +22,63 @@
   border-radius: 5px;
   padding: 0 10px;
   text-decoration: none;
-
+	
 	transition: background-color .1s ease-in-out;
-
+	
   &:hover {
-    background-color: #4361ee;
+		background-color: #4361ee;
   }
 }
 
 .buttons {
-  button {
-    margin-left: 10px;
+	display: flex;
+	justify-content: center;
+	align-items:center;
+	gap: 30px;
+	
+	
+	button {
+		margin: 0;
+		padding: 0;
+		background: none;
+		border: none;
   }
-
+	
   a {
-    text-decoration: none;
+		text-decoration: none;
   }
+	
+	.addPostIcon {
+		margin-bottom: -7px;
+		transition: all .1s ease-in-out;
+
+		&:hover {
+			transform: scale(1.1);
+		}
+	}
+	.userIcon, 
+	.addPostIcon {
+		height: 27px;
+		transition: all .1s ease-in-out;
+		cursor: pointer;
+
+		&:hover {
+			transform: scale(1.1);
+		}
+	}
+	.logoutIcon {
+		height: 23px;
+		transition: all .1s ease-in-out;
+		cursor: pointer;
+
+		&:hover {
+			transform: scale(1.1);
+		}
+	}
+
+}
+
+.loginButtons {
+	display: flex;
+	gap: 13px;
 }

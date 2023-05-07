@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 import styles from './ErrorBlock.module.scss'
-import errorImage from './errorImage.svg'
+import errorImage from './img/errorImage.svg'
 
 export const ErrorBlock = ({ errorText, errorStatus, fullPage }) => {
 	return (

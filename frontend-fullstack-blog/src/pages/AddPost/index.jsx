@@ -9,6 +9,7 @@ import TextField from '@mui/material/TextField'
 import Paper from '@mui/material/Paper'
 import Button from '@mui/material/Button'
 import SimpleMDE from 'react-simplemde-editor'
+import { MDEoptions } from './MDEoptions'
 import 'easymde/dist/easymde.min.css'
 import styles from './AddPost.module.scss'
 
@@ -21,6 +22,8 @@ export const AddPost = () => {
 	const [tags, setTags] = useState('')
 	const [imageUrl, setImageUrl] = useState('')
 	const inputFileRef = useRef(null)
+
+	const [preview, setPreview] = useState(false)
 
 	const isEditing = Boolean(id)
 
@@ -92,20 +95,15 @@ export const AddPost = () => {
 	}, [])
 
 	const options = useMemo(
-		() => ({
-			spellChecker: false,
-			maxHeight: '400px',
-			autofocus: true,
-			placeholder: 'Текст статьи...',
-			status: false,
-			autosave: {
-				enabled: true,
-				delay: 1000,
-				uniqueId: 'create-post',
-			},
-		}),
+		() => (
+			MDEoptions
+		),
 		[]
 	)
+
+	const handleTogglePreview = () => {
+		setPreview(!preview)
+	}
 
 	if (!window.localStorage.getItem('token') && !isAuth) {
 		return <Navigate to='/login' />
@@ -160,7 +158,12 @@ export const AddPost = () => {
 				options={options}
 			/>
 			<div className={styles.buttons}>
-				<Button onClick={onSubmit} size='large' variant='contained'>
+				<Button
+					onClick={onSubmit}
+					size='large'
+					variant='contained'
+					disabled={title.length <= 5 || text.length <= 5}
+				>
 					{isEditing ? 'Сохранить' : 'Опубликовать'}
 				</Button>
 				<a href='/'>

@@ -42,7 +42,10 @@ app.use(express.json())
 app.use(cors())
 app.use('/uploads', express.static('uploads'))
 
-// Auth
+// User: get
+app.get('/auth/me', checkAuth, UserController.getMe)
+
+// User: actions
 app.post(
 	'/auth/login',
 	loginValidation,
@@ -55,7 +58,12 @@ app.post(
 	handleValidationErrors,
 	UserController.register
 )
-app.get('/auth/me', checkAuth, UserController.getMe)
+app.patch(
+	'/user',
+	checkAuth,
+	handleValidationErrors,
+	UserController.updateUserAvatar
+)
 
 // Post: get
 app.get('/posts', PostController.getAllPosts)

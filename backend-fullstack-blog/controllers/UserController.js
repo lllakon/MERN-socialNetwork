@@ -114,3 +114,30 @@ export const getMe = async (req, res) => {
 		})
 	}
 }
+
+export const updateUserAvatar = async (req, res) => {
+	try {
+		const userId = req.body.userId
+		const newImageUrl = req.body.url
+
+		console.log(newImageUrl)
+
+		await UserModel.updateOne(
+			{
+				_id: userId,
+			},
+			{
+				avatarUrl: newImageUrl,
+			}
+		)
+
+		res.json({
+			sucess: true,
+		})
+	} catch (error) {
+		console.log(error)
+		res.status(500).json({
+			message: 'Не удалось изменить аватарку',
+		})
+	}
+}

@@ -77,10 +77,6 @@ export const getPostsByTag = async (req, res) => {
 	}
 }
 
-//
-
-//
-
 export const getOnePost = async (req, res) => {
 	try {
 		const postId = req.params.id

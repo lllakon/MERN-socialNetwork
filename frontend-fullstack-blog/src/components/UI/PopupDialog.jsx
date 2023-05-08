@@ -10,9 +10,9 @@ import DialogTitle from '@mui/material/DialogTitle'
 export const PopupDialog = ({
 	title,
 	contextText,
-	onSubmitFn,
 	btnColor = null,
 	btnBorder = true,
+	setResponse,
 }) => {
 	const [open, setOpen] = useState(false)
 	const [inputValue, setInputValue] = useState('')
@@ -32,7 +32,6 @@ export const PopupDialog = ({
 				variant='outlined'
 				onClick={handleClickOpen}
 			>
-				{/* <p style={{color: btnColor, margin: '0'}}> Изменить</p> */}
 				Изменить
 			</Button>
 			<Dialog open={open} onClose={handleClose} maxWidth='sm' fullWidth>
@@ -54,8 +53,8 @@ export const PopupDialog = ({
 					<Button onClick={handleClose}>Отмена</Button>
 					<Button
 						onClick={() => {
+							setResponse(inputValue)
 							handleClose()
-							onSubmitFn()
 						}}
 					>
 						Подтвердить

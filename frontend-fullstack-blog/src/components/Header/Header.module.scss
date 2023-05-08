@@ -47,18 +47,11 @@
   a {
 		text-decoration: none;
   }
-	
-	.addPostIcon {
-		margin-bottom: -7px;
-		transition: all .1s ease-in-out;
 
-		&:hover {
-			transform: scale(1.1);
-		}
-	}
 	.userIcon, 
 	.addPostIcon {
-		height: 27px;
+		margin-bottom: -7px;
+		height: 25px;
 		transition: all .1s ease-in-out;
 		cursor: pointer;
 
@@ -67,7 +60,7 @@
 		}
 	}
 	.logoutIcon {
-		height: 23px;
+		height: 21px;
 		transition: all .1s ease-in-out;
 		cursor: pointer;
 

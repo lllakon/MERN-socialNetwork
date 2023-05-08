@@ -8,7 +8,6 @@ export const MDEoptions = {
 		'heading',
 		'bold',
 		'italic',
-		'strikethrough',
 		'|',
 		'link',
 		'quote',

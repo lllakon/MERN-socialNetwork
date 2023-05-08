@@ -38,7 +38,10 @@ export const getPopularTags = async (req, res) => {
 	try {
 		const posts = await PostModel.find().exec()
 
-		const postsFiltered = posts.map((obj) => obj.tags).flat().filter(Boolean)
+		const postsFiltered = posts
+			.map((obj) => obj.tags)
+			.flat()
+			.filter(Boolean)
 		const tagsDuplicates = filter(postsFiltered, (val, i, iteratee) => {
 			return includes(iteratee, val, i + 1)
 		})
@@ -74,10 +77,14 @@ export const getPostsByTag = async (req, res) => {
 	}
 }
 
+//
+
+//
+
 export const getOnePost = async (req, res) => {
 	try {
 		const postId = req.params.id
-
+		
 		PostModel.findOneAndUpdate(
 			{
 				_id: postId,

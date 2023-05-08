@@ -17,7 +17,7 @@ export const FullPost = () => {
 
 	useEffect(() => {
 		axios
-			.get(`/posts/${id}`)
+			.get(`/posts/${id}?userId=${userData?._id}`)
 			.then((res) => {
 				setData(res.data)
 				setLoading(false)

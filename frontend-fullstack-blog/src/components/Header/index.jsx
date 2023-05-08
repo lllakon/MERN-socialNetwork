@@ -38,13 +38,13 @@ export const Header = () => {
 									alt='Написать статью'
 								/>
 							</Link>
-							<button>
+							<Link to="/user">
 								<img
 									className={styles.userIcon}
 									src={userIcon}
 									alt='Личный кабинет'
 								/>
-							</button>
+							</Link>
 							<button>
 								<img
 									className={styles.logoutIcon}

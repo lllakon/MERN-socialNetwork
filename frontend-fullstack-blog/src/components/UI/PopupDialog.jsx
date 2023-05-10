@@ -14,7 +14,7 @@ export const PopupDialog = ({
 	btnColor = null,
 	btnBorder = true,
 	setResponse,
-	mailCheck = false
+	mailCheck = false,
 }) => {
 	const [open, setOpen] = useState(false)
 	const [inputValue, setInputValue] = useState('')
@@ -26,8 +26,6 @@ export const PopupDialog = ({
 	const handleClose = () => {
 		setOpen(false)
 	}
-
-	console.log(mailCheck && !emailValidation(inputValue))
 
 	return (
 		<div>

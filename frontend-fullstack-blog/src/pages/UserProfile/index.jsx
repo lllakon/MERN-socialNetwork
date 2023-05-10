@@ -3,7 +3,8 @@ import { useSelector } from 'react-redux'
 import axios from '../../axios'
 
 import { PopupDialog } from '../../components/UI/PopupDialog'
-import { emailValidation } from '../../helpers/emailValidation'
+import { CircularLoader } from '../../components/index'
+// import  {CircularLoader}  from '../../components/UI/CircularLoader'
 
 import styles from './UserProfile.module.scss'
 
@@ -51,7 +52,7 @@ export const UserProfile = () => {
 	}, [newEmail])
 
 	if (!userData) {
-		return <p>Загрузка...</p>
+		return <CircularLoader />
 	}
 
 	return (

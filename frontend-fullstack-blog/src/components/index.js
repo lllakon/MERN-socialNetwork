@@ -9,4 +9,5 @@ export * from "./Header";
 export * from "./ErrorBlock";
 
 // UI
+export * from "./UI/CircularLoader";
 export * from "./UI/PopupDialog";

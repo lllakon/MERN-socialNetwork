@@ -4,9 +4,7 @@ import { useSelector } from 'react-redux'
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown'
 import axios from '../axios'
 
-import { Post } from '../components/Post'
-import { CommentsBlock } from '../components/CommentsBlock'
-import { ErrorBlock } from '../components'
+import { Post, CommentsBlock, ErrorBlock } from '../components/index'
 
 export const FullPost = () => {
 	const { id } = useParams()

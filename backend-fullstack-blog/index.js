@@ -59,10 +59,16 @@ app.post(
 	UserController.register
 )
 app.patch(
-	'/user',
+	'/user/avatar',
 	checkAuth,
 	handleValidationErrors,
 	UserController.updateUserAvatar
+)
+app.patch(
+	'/user/email',
+	checkAuth,
+	handleValidationErrors,
+	UserController.updateUserEmail
 )
 
 // Post: get

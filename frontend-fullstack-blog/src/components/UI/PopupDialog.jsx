@@ -6,6 +6,7 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
+import { emailValidation } from '../../helpers/emailValidation'
 
 export const PopupDialog = ({
 	title,
@@ -13,6 +14,7 @@ export const PopupDialog = ({
 	btnColor = null,
 	btnBorder = true,
 	setResponse,
+	mailCheck = false
 }) => {
 	const [open, setOpen] = useState(false)
 	const [inputValue, setInputValue] = useState('')
@@ -24,6 +26,8 @@ export const PopupDialog = ({
 	const handleClose = () => {
 		setOpen(false)
 	}
+
+	console.log(mailCheck && !emailValidation(inputValue))
 
 	return (
 		<div>
@@ -44,7 +48,6 @@ export const PopupDialog = ({
 						autoFocus
 						margin='dense'
 						id='name'
-						type='url'
 						fullWidth
 						variant='standard'
 					/>
@@ -56,6 +59,7 @@ export const PopupDialog = ({
 							setResponse(inputValue)
 							handleClose()
 						}}
+						disabled={mailCheck && !emailValidation(inputValue)}
 					>
 						Подтвердить
 					</Button>

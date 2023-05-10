@@ -3,15 +3,14 @@ import { useSelector } from 'react-redux'
 import axios from '../../axios'
 
 import { PopupDialog } from '../../components/UI/PopupDialog'
+import { emailValidation } from '../../helpers/emailValidation'
+
 import styles from './UserProfile.module.scss'
 
 export const UserProfile = () => {
 	const userData = useSelector((state) => state.auth.data)
 	const [newAvatar, setNewAvatar] = useState('')
-
-	const changeEmailHandler = () => {
-		console.log('Смена email не реализована :((')
-	}
+	const [newEmail, setNewEmail] = useState('')
 
 	const fetchChangeAvatar = async () => {
 		const newAvatarData = {
@@ -20,18 +19,36 @@ export const UserProfile = () => {
 		}
 
 		try {
-			await axios.patch('/user', newAvatarData)
+			await axios.patch('/user/avatar', newAvatarData)
 		} catch (error) {
 			console.warn(error)
 			alert('Не удалось изменить фотографию')
 		}
 	}
 
+	const fetchChangeEmail = async () => {
+		const newEmailData = {
+			userId: userData._id,
+			url: newEmail,
+		}
+
+		try {
+			await axios.patch('/user/email', newEmailData)
+		} catch (error) {
+			console.warn(error)
+			alert('Не удалось изменить email')
+		}
+	}
+
 	useEffect(() => {
 		if (newAvatar === '' || newAvatar.length <= 12) return
-		console.log('Отработал useEffect')
 		fetchChangeAvatar()
 	}, [newAvatar])
+
+	useEffect(() => {
+		if (newEmail === '' || newEmail.length <= 5) return
+		fetchChangeEmail()
+	}, [newEmail])
 
 	if (!userData) {
 		return <p>Загрузка...</p>
@@ -56,9 +73,11 @@ export const UserProfile = () => {
 				<div className={styles.emailSection}>
 					<p>Ваш email: {userData.email}</p>
 					<PopupDialog
-						onSubmitFn={changeEmailHandler}
 						title='Изменить email'
 						contextText='Введите новый email'
+						setResponse={setNewEmail}
+						inputType='email'
+						mailCheck
 					/>
 				</div>
 				<p>Дата регистрации: {userData.createdAt.replace('T', ' ').slice(0, 16)}</p>

@@ -120,8 +120,6 @@ export const updateUserAvatar = async (req, res) => {
 		const userId = req.body.userId
 		const newImageUrl = req.body.url
 
-		console.log(newImageUrl)
-
 		await UserModel.updateOne(
 			{
 				_id: userId,
@@ -138,6 +136,30 @@ export const updateUserAvatar = async (req, res) => {
 		console.log(error)
 		res.status(500).json({
 			message: 'Не удалось изменить аватарку',
+		})
+	}
+}
+
+export const updateUserEmail = async (req, res) => {
+	try {
+		const userId = req.body.userId
+		const newEmail = req.body.url
+		await UserModel.updateOne(
+			{
+				_id: userId,
+			},
+			{
+				email: newEmail,
+			}
+		)
+
+		res.json({
+			sucess: true,
+		})
+	} catch (error) {
+		console.log(error)
+		res.status(500).json({
+			message: 'Не удалось изменить email',
 		})
 	}
 }

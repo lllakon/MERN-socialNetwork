@@ -8,11 +8,11 @@ export const register = async (req, res) => {
 		const password = req.body.password
 		const salt = await bcrypt.genSalt(10)
 		const hash = await bcrypt.hash(password, salt)
-
+		
 		const doc = new UserModel({
 			email: req.body.email,
 			fullName: req.body.fullName,
-			avatarUrl: req.body.avatarUrl,
+			avatarUrl: 'https://icon-library.com/images/generic-user-icon/generic-user-icon-19.jpg',
 			passwordHash: hash,
 		})
 

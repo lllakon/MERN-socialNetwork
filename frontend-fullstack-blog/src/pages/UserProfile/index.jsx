@@ -13,6 +13,8 @@ export const UserProfile = () => {
 	const [newAvatar, setNewAvatar] = useState('')
 	const [newEmail, setNewEmail] = useState('')
 
+	console.log(userData)
+
 	const fetchChangeAvatar = async () => {
 		const newAvatarData = {
 			userId: userData._id,

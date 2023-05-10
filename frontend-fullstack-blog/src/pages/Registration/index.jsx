@@ -7,7 +7,8 @@ import { fetchRegister, selectIsAuth } from '../../redux/slices/auth'
 import { authErrorsHandler } from '../../helpers/authErrorsHandler'
 
 import { Typography, TextField, Paper, Button, Avatar } from '@mui/material'
-import styles from './Login.module.scss'
+import styles from './Registration.module.scss'
+import { PopupDialog } from '../../components'
 
 export const Registration = () => {
 	const dispatch = useDispatch()
@@ -40,7 +41,7 @@ export const Registration = () => {
 				Создание аккаунта
 			</Typography>
 			<div className={styles.avatar}>
-				<Avatar sx={{ width: 100, height: 100 }} />
+				<Avatar className={styles.avatarImage} sx={{ width: 100, height: 100 }} />
 			</div>
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<TextField

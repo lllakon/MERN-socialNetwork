@@ -5,7 +5,6 @@ import clsx from 'clsx'
 
 import { fetchRemovePost } from '../../redux/slices/posts'
 
-
 import { IconButton } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Clear'
 import EditIcon from '@mui/icons-material/Edit'
@@ -15,6 +14,7 @@ import styles from './Post.module.scss'
 
 import { UserInfo } from '../UserInfo'
 import { PostSkeleton } from './Skeleton'
+import axios from '../../axios'
 
 export const Post = ({
 	_id,
@@ -35,8 +35,8 @@ export const Post = ({
 
 	const onClickRemove = async () => {
 		if (window.confirm('Удалить статью?')) {
-			await dispatch(fetchRemovePost(_id))
-			navigate('/')
+					axios.delete(`/posts/${_id}`)
+					navigate('/')
 		}
 	}
 

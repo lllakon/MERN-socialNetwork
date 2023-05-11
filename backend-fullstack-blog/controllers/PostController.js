@@ -5,11 +5,23 @@ import { PostModel } from '../models/index.js'
 
 export const getAllPosts = async (req, res) => {
 	try {
+		const totalPostsCount = await PostModel.countDocuments()
+		const postsPerPage = req.query.limit || totalPostsCount
+		const pageNumber = req.query.page || 1
+
 		const posts = await PostModel.find()
+			.sort({ createdAt: -1 })
+			.limit(postsPerPage)
+			.skip((pageNumber - 1) * postsPerPage)
 			.populate({ path: 'user', select: ['user', 'avatarUrl', 'fullName'] })
 			.exec()
 
-		res.json(posts.reverse())
+		const result = {
+			posts: posts,
+			totalPostsCount: totalPostsCount,
+		}
+
+		res.json(result)
 	} catch (error) {
 		console.log(error)
 		res.status(500).json({
@@ -20,12 +32,23 @@ export const getAllPosts = async (req, res) => {
 
 export const getAllPopularPosts = async (req, res) => {
 	try {
+		const totalPostsCount = await PostModel.countDocuments()
+		const postsPerPage = req.query.limit || totalPostsCount
+		const pageNumber = req.query.page || 1
+
 		const posts = await PostModel.find()
-			.populate('user')
 			.sort({ viewsCount: -1 })
+			.limit(postsPerPage)
+			.skip((pageNumber - 1) * postsPerPage)
+			.populate('user')
 			.exec()
 
-		res.json(posts)
+		const result = {
+			posts: posts,
+			totalPostsCount: totalPostsCount,
+		}
+
+		res.json(result)
 	} catch (error) {
 		console.log(error)
 		res.status(500).json({
@@ -80,7 +103,7 @@ export const getPostsByTag = async (req, res) => {
 export const getOnePost = async (req, res) => {
 	try {
 		const postId = req.params.id
-		
+
 		PostModel.findOneAndUpdate(
 			{
 				_id: postId,

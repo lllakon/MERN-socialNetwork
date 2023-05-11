@@ -12,7 +12,7 @@ export const Home = () => {
 	const dispatch = useDispatch()
 	const userData = useSelector((state) => state.auth.data)
 	const { posts, tags } = useSelector((state) => state.posts)
-	const [sortedBy, setSortedBy] = useState('')
+	const [sortedBy, setSortedBy] = useState('new')
 
 	const isPostsLoading = posts.status === 'loading'
 	const isPostsError = posts.status === 'rejected'

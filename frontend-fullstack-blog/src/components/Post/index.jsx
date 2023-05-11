@@ -1,11 +1,12 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
+import clsx from 'clsx'
 
 import { fetchRemovePost } from '../../redux/slices/posts'
 
-import clsx from 'clsx'
-import IconButton from '@mui/material/IconButton'
+
+import { IconButton } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Clear'
 import EditIcon from '@mui/icons-material/Edit'
 import EyeIcon from '@mui/icons-material/RemoveRedEyeOutlined'
@@ -32,15 +33,15 @@ export const Post = ({
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 
-	if (isLoading) {
-		return <PostSkeleton />
-	}
-
 	const onClickRemove = async () => {
 		if (window.confirm('Удалить статью?')) {
 			await dispatch(fetchRemovePost(_id))
 			navigate('/')
 		}
+	}
+
+	if (isLoading) {
+		return <PostSkeleton />
 	}
 
 	return (

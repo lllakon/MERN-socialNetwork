@@ -32,7 +32,7 @@ export const Home = () => {
 	const getPopularPosts = () => {
 		if (sortedBy === 'popular') return
 		dispatch(fetchPosts('/popular'))
-		setSortedBy('popular')
+		setSortedBy('popular')spso
 	}
 
 	return (

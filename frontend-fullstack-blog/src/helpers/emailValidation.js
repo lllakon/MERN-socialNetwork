@@ -1,4 +1,4 @@
-export function emailValidation(email) {
+export const emailValidation = (email) => {
   const regex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
   return regex.test(email);
 }

@@ -40,7 +40,7 @@ export const PostsByTag = () => {
 
 	return (
 		<>
-			<h2>Статьи по тегу: {location.pathname.replace('/tags/', '')}</h2>
+			<h2>Посты по тегу: #{location.pathname.replace('/tags/', '')}</h2>
 			<Grid container spacing={4}>
 				<Grid xs={8} item>
 					{(postsLoading ? [...Array(5)] : posts).map((obj, index) =>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { useDispatch, useSelector } from 'react-redux'
-import axios from '../axios'
+import axios from '../../axios'
 
 import {
 	Post,
@@ -9,13 +9,13 @@ import {
 	ErrorBlock,
 	CircularLoader,
 	EndOfFeed,
-} from '../components/index'
-import { fetchTags } from '../redux/slices/posts'
-import { scrollToTop } from '../helpers/scrollToTop'
+} from '../../components/index'
+import { fetchTags } from '../../redux/slices/posts'
+import { scrollToTop } from '../../helpers/scrollToTop'
 
 import { Tabs, Tab, Grid } from '@mui/material'
 export const Home = () => {
-	// TODO: hasMore переключается в false если скроллить при загрузке страницы
+	// TODO: Не обновляются посты при удалении
 	const dispatch = useDispatch()
 	const userData = useSelector((state) => state.auth.data)
 	const { tags } = useSelector((state) => state.posts)
@@ -48,6 +48,7 @@ export const Home = () => {
 			.catch((err) => {
 				console.warn(err)
 				setPostsError(true)
+				setHasMore(false)
 			})
 	}, [sortedBy])
 
@@ -56,31 +57,29 @@ export const Home = () => {
 		console.log(currentPage)
 
 		if (posts.length < postsTotalCount) {
-			axios.get(`/posts/${sortedBy}?limit=5&page=${currentPage}`).then((res) => {
-				setPosts([...posts, ...res.data.posts])
-				setCurrentPage((prev) => prev + 1)
-			})
+			axios
+				.get(`/posts/${sortedBy}?limit=5&page=${currentPage}`)
+				.then((res) => {
+					setPosts([...posts, ...res.data.posts])
+					setCurrentPage((prev) => prev + 1)
+				})
+				.catch((err) => {
+					console.warn(err)
+					setPostsError(true)
+					setHasMore(false)
+				})
 		} else if (!postsLoading) {
 			setHasMore(false)
 		}
 	}
 
-	const sortByNew = () => {
-		if (sortedBy === 'new') return
+	const sortPostsBy = (sortBy) => {
+		if (sortedBy === sortBy) return
 		setPostsLoading(true)
 		setHasMore(true)
 		setPosts([])
 		setCurrentPage(1)
-		setSortedBy('new')
-	}
-
-	const sortByPopular = () => {
-		if (sortedBy === 'popular') return
-		setPostsLoading(true)
-		setHasMore(true)
-		setPosts([])
-		setCurrentPage(1)
-		setSortedBy('popular')
+		setSortedBy(sortBy)
 	}
 
 	return (
@@ -90,33 +89,36 @@ export const Home = () => {
 				value={sortedBy === 'popular' ? 1 : 0}
 				aria-label='basic tabs example'
 			>
-				<Tab label='Новые' onClick={sortByNew} />
-				<Tab label='Популярные' onClick={sortByPopular} />
+				<Tab label='Новые' onClick={() => sortPostsBy('new')} />
+				<Tab label='Популярные' onClick={() => sortPostsBy('popular')} />
 			</Tabs>
 			<Grid container spacing={4}>
 				<Grid xs={8} item>
-					{postsError && <ErrorBlock errorText='Не удалось загрузить посты' />}
 					<InfiniteScroll
 						dataLength={posts.length}
 						next={fetchMorePosts}
 						hasMore={hasMore}
 						loader={<CircularLoader />}
-						endMessage={<EndOfFeed />}
+						endMessage={!postsError && <EndOfFeed />}
 						style={{ overflow: 'hidden' }}
 					>
-						{(postsLoading ? [...Array(5)] : posts).map((obj, index) =>
-							postsLoading ? (
-								<Post key={index} isLoading={true} />
-							) : (
-								<Post
-									key={obj._id}
-									{...obj}
-									imageUrl={obj.imageUrl && `http://localhost:4444${obj.imageUrl}`}
-									isEditable={userData?._id === obj.user?._id}
-								/>
-							)
+						{(postsLoading && !postsError ? [...Array(5)] : posts).map(
+							(obj, index) =>
+								postsLoading ? (
+									<Post key={index} isLoading={true} />
+								) : (
+									<Post
+										key={obj._id}
+										{...obj}
+										imageUrl={obj.imageUrl && `http://localhost:4444${obj.imageUrl}`}
+										isEditable={userData?._id === obj.user?._id}
+									/>
+								)
 						)}
 					</InfiniteScroll>
+					{postsError && (
+						<ErrorBlock errorText='Произошла ошибка при загрузке постов 😔' />
+					)}
 				</Grid>
 				<Grid xs={4} item>
 					<TagsBlock items={tags.items} isLoading={isTagsLoading} />

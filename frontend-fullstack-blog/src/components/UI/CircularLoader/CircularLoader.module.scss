@@ -3,12 +3,14 @@
 
 	width: 100%;
 	max-width: 720px;
-	height: 735px;
-	// min-height: 100vh;
 
 	display: flex;
 	justify-content: space-around;
 	align-items: center;
+}
+
+.fullSize {
+	height: 735px;
 }
 
 /* Keyframes Spin */
@@ -56,4 +58,8 @@
 	);
 
 	animation-duration: 2s;
+}
+
+.fullWidth {
+	
 }

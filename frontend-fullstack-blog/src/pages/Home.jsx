@@ -32,13 +32,13 @@ export const Home = () => {
 
 	useEffect(() => {
 		axios
-		.get(`/posts/${sortedBy}?limit=5&page=${currentPage}`)
-		.then((res) => {
-			setPosts(res.data.posts)
-			setPostsTotalCount(res.data.totalPostsCount)
-			setCurrentPage((prev) => prev + 1)
-			setPostsLoading(false)
-			scrollToTop()
+			.get(`/posts/${sortedBy}?limit=5&page=${currentPage}`)
+			.then((res) => {
+				setPosts(res.data.posts)
+				setPostsTotalCount(res.data.totalPostsCount)
+				setCurrentPage((prev) => prev + 1)
+				setPostsLoading(false)
+				scrollToTop()
 			})
 			.catch((err) => {
 				console.warn(err)
@@ -52,33 +52,31 @@ export const Home = () => {
 
 		if (posts.length < postsTotalCount) {
 			//TIMEOUT УБРАТЬ
-			setTimeout(() => {
 				axios.get(`/posts/${sortedBy}?limit=5&page=${currentPage}`).then((res) => {
 					setPosts([...posts, ...res.data.posts])
 					setCurrentPage((prev) => prev + 1)
 				})
-			}, 500)
 		} else if (!postsLoading) {
 			setHasMore(false)
 		}
-
-	}
-	console.log(posts)
-
-	const getPopularPosts = () => {
-		setPostsLoading(true)
-		setHasMore(true)
-		setPosts([])
-		setCurrentPage(1)
-		setSortedBy('popular')
 	}
 
-	const getNewPosts = () => {
+	const sortByNew = () => {
+		if (sortedBy === 'new') return
 		setPostsLoading(true)
 		setHasMore(true)
 		setPosts([])
 		setCurrentPage(1)
 		setSortedBy('new')
+	}
+
+	const sortByPopular = () => {
+		if (sortedBy === 'popular') return
+		setPostsLoading(true)
+		setHasMore(true)
+		setPosts([])
+		setCurrentPage(1)
+		setSortedBy('popular')
 	}
 
 	return (
@@ -88,8 +86,8 @@ export const Home = () => {
 				value={sortedBy === 'popular' ? 1 : 0}
 				aria-label='basic tabs example'
 			>
-				<Tab label='Новые' onClick={getNewPosts} />
-				<Tab label='Популярные' onClick={getPopularPosts} />
+				<Tab label='Новые' onClick={sortByNew} />
+				<Tab label='Популярные' onClick={sortByPopular} />
 			</Tabs>
 			<Grid container spacing={4}>
 				<Grid xs={8} item>

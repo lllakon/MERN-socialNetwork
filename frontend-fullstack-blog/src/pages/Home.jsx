@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from '../axios'
 
-import { Post, TagsBlock, ErrorBlock } from '../components/index'
+import { Post, TagsBlock, ErrorBlock, CircularLoader } from '../components/index'
 import { fetchTags } from '../redux/slices/posts'
 import { scrollToTop } from '../helpers/scrollToTop'
 
@@ -94,15 +94,14 @@ export const Home = () => {
 					{postsError && (
 						<ErrorBlock
 							errorText='Не удалось загрузить посты'
-							// errorStatus={posts.error}
 						/>
 					)}
 					<InfiniteScroll
 						dataLength={posts.length}
 						next={fetchMorePosts}
 						hasMore={hasMore}
-						loader={<p>Scroll loader...</p>}
-						endMessage={<p>Posts end</p>}
+						loader={<CircularLoader />}
+						endMessage={<p>На этом всё</p>}
 					>
 						{(postsLoading ? [...Array(5)] : posts).map((obj, index) =>
 							postsLoading ? (

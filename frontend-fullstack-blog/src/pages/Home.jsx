@@ -32,7 +32,7 @@ export const Home = () => {
 
 	useEffect(() => {
 		axios
-		.get(`/posts?limit=5&page=${currentPage}`)
+		.get(`/posts/${sortedBy}?limit=5&page=${currentPage}`)
 		.then((res) => {
 			setPosts(res.data.posts)
 			setPostsTotalCount(res.data.totalPostsCount)
@@ -44,7 +44,7 @@ export const Home = () => {
 				console.warn(err)
 				setPostsError(true)
 			})
-	}, [])
+	}, [sortedBy])
 
 	const fetchMorePosts = () => {
 		console.log('fetchMorePosts')
@@ -53,7 +53,7 @@ export const Home = () => {
 		if (posts.length < postsTotalCount) {
 			//TIMEOUT УБРАТЬ
 			setTimeout(() => {
-				axios.get(`/posts?limit=5&page=${currentPage}`).then((res) => {
+				axios.get(`/posts/${sortedBy}?limit=5&page=${currentPage}`).then((res) => {
 					setPosts([...posts, ...res.data.posts])
 					setCurrentPage((prev) => prev + 1)
 				})
@@ -63,14 +63,26 @@ export const Home = () => {
 		}
 
 	}
+	console.log(posts)
 
-	const getPopularPosts = () => {}
+	const getPopularPosts = () => {
+		setPostsLoading(true)
+		setHasMore(true)
+		setPosts([])
+		setCurrentPage(1)
+		setSortedBy('popular')
+	}
 
-	const getNewPosts = () => {}
+	const getNewPosts = () => {
+		setPostsLoading(true)
+		setHasMore(true)
+		setPosts([])
+		setCurrentPage(1)
+		setSortedBy('new')
+	}
 
 	return (
 		<>
-			{postsTotalCount}
 			<Tabs
 				style={{ marginBottom: 15 }}
 				value={sortedBy === 'popular' ? 1 : 0}

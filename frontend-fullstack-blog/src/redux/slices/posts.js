@@ -1,19 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from '../../axios'
 
-export const fetchPosts = createAsyncThunk(
-	'posts/fetchPosts',
-	async (popular = '', { rejectWithValue }) => {
-		try {
-			const { data } = await axios.get(`/posts${popular}`)
-			return data
-		} catch (error) {
-			console.error(error)
-			return rejectWithValue(error.message)
-		}
-	}
-)
-
 export const fetchTags = createAsyncThunk(
 	'posts/fetchTags',
 	async (_, { rejectWithValue }) => {
@@ -36,10 +23,6 @@ export const fetchRemovePost = createAsyncThunk(
 )
 
 const initialState = {
-	posts: {
-		items: [],
-		status: null,
-	},
 	tags: {
 		items: [],
 		status: null,
@@ -53,22 +36,9 @@ const postsSlice = createSlice({
 	reducers: {},
 	extraReducers: {
 		// Get posts
-		[fetchPosts.pending]: (state) => {
-			state.posts.items = []
-			state.posts.status = 'loading'
-		},
-		[fetchPosts.fulfilled]: (state, action) => {
-			state.posts.items = action.payload
-			state.posts.status = 'resolved'
-		},
-		[fetchPosts.rejected]: (state, action) => {
-			state.posts.items = []
-			state.posts.error = action.payload
-			state.posts.status = 'rejected'
-		},
 		// Get tags
 		[fetchTags.pending]: (state) => {
-			state.posts.items = []
+			state.tags.items = []
 			state.tags.status = 'loading'
 		},
 		[fetchTags.fulfilled]: (state, action) => {

@@ -4,99 +4,73 @@ import axios from '../axios'
 
 import { Post, TagsBlock, ErrorBlock } from '../components/index'
 import { fetchTags } from '../redux/slices/posts'
+import { scrollToTop } from '../helpers/scrollToTop'
 
 import { Tabs, Tab, Grid } from '@mui/material'
-import { useInView } from 'react-intersection-observer'
+import InfiniteScroll from 'react-infinite-scroll-component'
 
 export const Home = () => {
-
-	// СЛОМАЛОСЬ УДАЛЕНИЕ; попробовать другой обсервер
-
+	// TODO: hasMore переключается в false если скроллить при загрузке страницы
 	const dispatch = useDispatch()
 	const userData = useSelector((state) => state.auth.data)
 	const { tags } = useSelector((state) => state.posts)
 	const [currentPage, setCurrentPage] = useState(1)
-	const [fetching, setFetching] = useState(true)
-	const [totalCount, setTotalCount] = useState(0)
 	const [sortedBy, setSortedBy] = useState('new')
 
+	const [postsTotalCount, setPostsTotalCount] = useState(0)
 	const [posts, setPosts] = useState([])
+	const [hasMore, setHasMore] = useState(true)
 	const [postsLoading, setPostsLoading] = useState(true)
 	const [postsError, setPostsError] = useState(false)
 
-	console.log(currentPage)
-
-	const { ref, inView } = useInView({
-		threshold: 0.5,
-		triggerOnce: true,
-	})
-
+	// TAGS
 	const isTagsLoading = tags.status === 'loading' || tags.status === 'rejected'
 	useEffect(() => {
 		dispatch(fetchTags())
 	}, [])
+	//
 
 	useEffect(() => {
 		axios
-			.get(
-				`/posts${sortedBy === 'new' ? '' : '/popular'}?limit=5&page=${currentPage}`
-			)
-			.then((res) => {
-				setPostsLoading(true)
-				setPosts([...posts, ...res.data.posts])
-				setCurrentPage((prev) => prev + 1)
-				setTotalCount(res.data.totalPostsCount)
-				setPostsLoading(false)
+		.get(`/posts?limit=5&page=${currentPage}`)
+		.then((res) => {
+			setPosts(res.data.posts)
+			setPostsTotalCount(res.data.totalPostsCount)
+			setCurrentPage((prev) => prev + 1)
+			setPostsLoading(false)
+			scrollToTop()
 			})
-			.finally(() => setFetching(false))
-	}, [fetching])
+			.catch((err) => {
+				console.warn(err)
+				setPostsError(true)
+			})
+	}, [])
 
-	const getPopularPosts = () => {
-		setPosts([])
-		setPostsLoading(true)
-		setCurrentPage(1)
-		setSortedBy('popular')
+	const fetchMorePosts = () => {
+		console.log('fetchMorePosts')
 		console.log(currentPage)
-	}
 
-	const getNewPosts = () => {
-		setPosts([])
-		setPostsLoading(true)
-		setCurrentPage(1)
-		setSortedBy('new')
-		console.log(currentPage)
-	}
-
-	// const getNewPosts = () => {
-	// 	if (sortedBy === 'new') return
-	// 	axios
-	// 		.get(`/posts${sortedBy === 'new' ? '' : '/popular'}?limit=5&page=${currentPage}`)
-	// 		.then((res) => {
-	// 			setPosts([...posts, ...res.data.posts])
-	// 			setCurrentPage((prev) => prev + 1)
-	// 			setPostsLoading(false)
-	// 			setTotalCount(res.data.totalPostsCount)
-	// 		})
-	// 		.finally(() => setFetching(false))
-	// 	setSortedBy('new')
-	// }
-
-	// const getPopularPosts = () => {
-	// 	// if (sortedBy === 'popular') return
-	// 	// dispatch(fetchPosts({popular: '/popular'}))
-	// 	// setSortedBy('popular')
-	// }
-
-	useEffect(() => {
-		if (posts.length < totalCount) {
-			setFetching(true)
+		if (posts.length < postsTotalCount) {
+			//TIMEOUT УБРАТЬ
+			setTimeout(() => {
+				axios.get(`/posts?limit=5&page=${currentPage}`).then((res) => {
+					setPosts([...posts, ...res.data.posts])
+					setCurrentPage((prev) => prev + 1)
+				})
+			}, 500)
+		} else if (!postsLoading) {
+			setHasMore(false)
 		}
-	}, [inView, sortedBy])
 
-	console.log(inView)
+	}
+
+	const getPopularPosts = () => {}
+
+	const getNewPosts = () => {}
 
 	return (
 		<>
+			{postsTotalCount}
 			<Tabs
 				style={{ marginBottom: 15 }}
 				value={sortedBy === 'popular' ? 1 : 0}
@@ -113,23 +87,26 @@ export const Home = () => {
 							// errorStatus={posts.error}
 						/>
 					)}
-					{(postsLoading ? [...Array(5)] : posts).map((obj, index) =>
-						postsLoading ? (
-							<Post key={index} isLoading={true} />
-						) : (
-							<div>
+					<InfiniteScroll
+						dataLength={posts.length}
+						next={fetchMorePosts}
+						hasMore={hasMore}
+						loader={<p>Scroll loader...</p>}
+						endMessage={<p>Posts end</p>}
+					>
+						{(postsLoading ? [...Array(5)] : posts).map((obj, index) =>
+							postsLoading ? (
+								<Post key={index} isLoading={true} />
+							) : (
 								<Post
+									key={obj._id}
 									{...obj}
 									imageUrl={obj.imageUrl && `http://localhost:4444${obj.imageUrl}`}
 									isEditable={userData?._id === obj.user?._id}
 								/>
-								<div
-									style={{ width: '400px', height: '30px', backgroundColor: 'red' }}
-									ref={ref}
-								></div>
-							</div>
-						)
-					)}
+							)
+						)}
+					</InfiniteScroll>
 				</Grid>
 				<Grid xs={4} item>
 					<TagsBlock items={tags.items} isLoading={isTagsLoading} />

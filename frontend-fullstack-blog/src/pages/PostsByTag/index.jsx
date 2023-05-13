@@ -7,6 +7,7 @@ import { Post, TagsBlock } from '../../components'
 import { Grid, Typography } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchTags } from '../../redux/slices/posts'
+import ServerRequests from '../../API/ServerRequests'
 
 export const PostsByTag = () => {
 	const navigate = useNavigate()
@@ -24,10 +25,10 @@ export const PostsByTag = () => {
 		dispatch(fetchTags())
 	}, [])
 
+	console.log(location.pathname)
 	useEffect(() => {
 		setPostsLoading(true)
-		const data = axios
-			.get(location.pathname)
+		ServerRequests.getPostsByTag(location.pathname)
 			.then((resp) => {
 				setPosts(resp.data)
 				setPostsLoading(false)
@@ -40,7 +41,7 @@ export const PostsByTag = () => {
 
 	return (
 		<>
-			<h2>Посты по тегу: #{location.pathname.replace('/tags/', '')}</h2>
+			<h2>Посты по тегу: {location.pathname.replace('/tags/', '')}</h2>
 			<Grid container spacing={4}>
 				<Grid xs={8} item>
 					{(postsLoading ? [...Array(5)] : posts).map((obj, index) =>

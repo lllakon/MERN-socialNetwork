@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { useDispatch, useSelector } from 'react-redux'
-import axios from '../../axios'
+import ServerRequests from '../../API/ServerRequests'
 
 import {
 	Post,
@@ -14,8 +14,9 @@ import { fetchTags } from '../../redux/slices/posts'
 import { scrollToTop } from '../../helpers/scrollToTop'
 
 import { Tabs, Tab, Grid } from '@mui/material'
+
 export const Home = () => {
-	// TODO: Не обновляются посты при удалении
+	// TODO: Не обновляются посты при удалении; у tags нет бесконечного скролла; вынести фетч в отдельную функцию?
 	const dispatch = useDispatch()
 	const userData = useSelector((state) => state.auth.data)
 	const { tags } = useSelector((state) => state.posts)
@@ -36,8 +37,7 @@ export const Home = () => {
 	//
 
 	useEffect(() => {
-		axios
-			.get(`/posts/${sortedBy}?limit=5&page=${currentPage}`)
+		ServerRequests.getPosts(sortedBy, currentPage)
 			.then((res) => {
 				setPosts(res.data.posts)
 				setPostsTotalCount(res.data.totalPostsCount)
@@ -57,8 +57,7 @@ export const Home = () => {
 		console.log(currentPage)
 
 		if (posts.length < postsTotalCount) {
-			axios
-				.get(`/posts/${sortedBy}?limit=5&page=${currentPage}`)
+			ServerRequests.getPosts(sortedBy, currentPage)
 				.then((res) => {
 					setPosts([...posts, ...res.data.posts])
 					setCurrentPage((prev) => prev + 1)

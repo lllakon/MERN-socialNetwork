@@ -38,6 +38,7 @@ export const getAllPopularPosts = async (req, res) => {
 
 		const posts = await PostModel.find()
 			.sort({ viewsCount: -1 })
+			.sort({ commentsCount: -1 })
 			.sort({ createdAt: -1 })
 			.limit(postsPerPage)
 			.skip((pageNumber - 1) * postsPerPage)

@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from 'react'
+import InfiniteScroll from 'react-infinite-scroll-component'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from '../axios'
 
-import { Post, TagsBlock, ErrorBlock, CircularLoader } from '../components/index'
+import {
+	Post,
+	TagsBlock,
+	ErrorBlock,
+	CircularLoader,
+	EndOfFeed,
+} from '../components/index'
 import { fetchTags } from '../redux/slices/posts'
 import { scrollToTop } from '../helpers/scrollToTop'
 
 import { Tabs, Tab, Grid } from '@mui/material'
-import InfiniteScroll from 'react-infinite-scroll-component'
-
 export const Home = () => {
 	// TODO: hasMore переключается в false если скроллить при загрузке страницы
 	const dispatch = useDispatch()
@@ -51,11 +56,10 @@ export const Home = () => {
 		console.log(currentPage)
 
 		if (posts.length < postsTotalCount) {
-			//TIMEOUT УБРАТЬ
-				axios.get(`/posts/${sortedBy}?limit=5&page=${currentPage}`).then((res) => {
-					setPosts([...posts, ...res.data.posts])
-					setCurrentPage((prev) => prev + 1)
-				})
+			axios.get(`/posts/${sortedBy}?limit=5&page=${currentPage}`).then((res) => {
+				setPosts([...posts, ...res.data.posts])
+				setCurrentPage((prev) => prev + 1)
+			})
 		} else if (!postsLoading) {
 			setHasMore(false)
 		}
@@ -91,17 +95,14 @@ export const Home = () => {
 			</Tabs>
 			<Grid container spacing={4}>
 				<Grid xs={8} item>
-					{postsError && (
-						<ErrorBlock
-							errorText='Не удалось загрузить посты'
-						/>
-					)}
+					{postsError && <ErrorBlock errorText='Не удалось загрузить посты' />}
 					<InfiniteScroll
 						dataLength={posts.length}
 						next={fetchMorePosts}
 						hasMore={hasMore}
 						loader={<CircularLoader />}
-						endMessage={<p>На этом всё</p>}
+						endMessage={<EndOfFeed />}
+						style={{ overflow: 'hidden' }}
 					>
 						{(postsLoading ? [...Array(5)] : posts).map((obj, index) =>
 							postsLoading ? (

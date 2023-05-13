@@ -38,9 +38,10 @@ export const getAllPopularPosts = async (req, res) => {
 
 		const posts = await PostModel.find()
 			.sort({ viewsCount: -1 })
+			.sort({ createdAt: -1 })
 			.limit(postsPerPage)
 			.skip((pageNumber - 1) * postsPerPage)
-			.populate('user')
+			.populate({ path: 'user', select: ['user', 'avatarUrl', 'fullName'] })
 			.exec()
 
 		const result = {

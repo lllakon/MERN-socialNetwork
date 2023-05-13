@@ -72,7 +72,7 @@ app.patch(
 )
 
 // Post: get
-app.get('/posts', PostController.getAllPosts)
+app.get('/posts/new', PostController.getAllPosts)
 app.get('/posts/popular', PostController.getAllPopularPosts)
 app.get('/posts/:id', PostController.getOnePost)
 app.get('/tags/:id', PostController.getPostsByTag)

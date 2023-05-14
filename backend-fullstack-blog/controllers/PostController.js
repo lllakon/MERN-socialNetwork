@@ -71,7 +71,15 @@ export const getPopularTags = async (req, res) => {
 			return includes(iteratee, val, i + 1)
 		})
 
-		const popularTags = uniq(tagsDuplicates).reverse().slice(0, 8)
+		const tagCount = postsFiltered.reduce((acc, tag) => {
+			acc[tag] = (acc[tag] || 0) + 1
+			return acc
+		}, {})
+
+		const popularTags = Object.entries(tagCount)
+			.sort((a, b) => b[1] - a[1])
+			.map(([tag, count]) => tag)
+			.slice(0, 8)
 
 		res.json(popularTags)
 	} catch (error) {
@@ -210,7 +218,6 @@ export const createDebugPosts = async (req, res) => {
 			await doc.save()
 			console.log(doc)
 		}
-
 
 		res.json({ message: '20 debug posts created' })
 	} catch (error) {

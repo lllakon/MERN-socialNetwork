@@ -15,8 +15,6 @@ import { scrollToTop } from '../../helpers/scrollToTop'
 import { Tabs, Tab, Grid } from '@mui/material'
 
 export const Home = () => {
-	// TODO: Не обновляются посты при удалении; у tags нет бесконечного скролла; вынести фетч в отдельную функцию?
-	const dispatch = useDispatch()
 	const userData = useSelector((state) => state.auth.data)
 	const [currentPage, setCurrentPage] = useState(1)
 	const [sortedBy, setSortedBy] = useState('new')
@@ -30,19 +28,6 @@ export const Home = () => {
 
 	const [tags, setTags] = useState([])
 	const [tagsLoading, setTagsLoading] = useState(true)
-
-	useEffect(() => {
-		ServerRequests.getPopularTags()
-			.then((res) => {
-				setTags(res.data)
-				setTagsLoading(false)
-				scrollToTop()
-			})
-			.catch((err) => {
-				console.warn(err)
-				setTagsLoading(true)
-			})
-	}, [])
 
 	useEffect(() => {
 		ServerRequests.getPosts(sortedBy, currentPage)
@@ -76,6 +61,18 @@ export const Home = () => {
 			setHasMore(false)
 		}
 	}
+
+	useEffect(() => {
+		ServerRequests.getPopularTags()
+			.then((res) => {
+				setTags(res.data)
+				setTagsLoading(false)
+			})
+			.catch((err) => {
+				console.warn(err)
+				setTagsLoading(true)
+			})
+	}, [])
 
 	const sortPostsBy = (sortBy) => {
 		if (sortedBy === sortBy) return

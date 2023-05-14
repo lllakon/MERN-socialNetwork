@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import InfiniteScroll from 'react-infinite-scroll-component'
-import { useDispatch, useSelector } from 'react-redux'
 import ServerRequests from '../../API/ServerRequests'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import InfiniteScroll from 'react-infinite-scroll-component'
 
 import {
 	Post,
@@ -14,10 +15,12 @@ import { fetchTags } from '../../redux/slices/posts'
 import { scrollToTop } from '../../helpers/scrollToTop'
 
 import { Tabs, Tab, Grid } from '@mui/material'
+import axios from '../../axios'
 
 export const Home = () => {
 	// TODO: Не обновляются посты при удалении; у tags нет бесконечного скролла; вынести фетч в отдельную функцию?
 	const dispatch = useDispatch()
+	const navigate = useNavigate()
 	const userData = useSelector((state) => state.auth.data)
 	const { tags } = useSelector((state) => state.posts)
 	const [currentPage, setCurrentPage] = useState(1)
@@ -28,6 +31,8 @@ export const Home = () => {
 	const [hasMore, setHasMore] = useState(true)
 	const [postsLoading, setPostsLoading] = useState(true)
 	const [postsError, setPostsError] = useState(false)
+	const [deletedPost, setDeletedPost] = useState('')
+
 
 	// TAGS
 	const isTagsLoading = tags.status === 'loading' || tags.status === 'rejected'
@@ -50,7 +55,7 @@ export const Home = () => {
 				setPostsError(true)
 				setHasMore(false)
 			})
-	}, [sortedBy])
+	}, [sortedBy, deletedPost])
 
 	const fetchMorePosts = () => {
 		console.log('fetchMorePosts')
@@ -79,6 +84,15 @@ export const Home = () => {
 		setPosts([])
 		setCurrentPage(1)
 		setSortedBy(sortBy)
+	}
+
+	//
+	const removePostHandler = async (id) => {
+		if (window.confirm('Удалить статью?')) {
+			await ServerRequests.removePost(id)
+			setCurrentPage(1)
+			setDeletedPost(id)
+		}
 	}
 
 	return (
@@ -111,6 +125,7 @@ export const Home = () => {
 										{...obj}
 										imageUrl={obj.imageUrl && `http://localhost:4444${obj.imageUrl}`}
 										isEditable={userData?._id === obj.user?._id}
+										onClickRemove={removePostHandler}
 									/>
 								)
 						)}

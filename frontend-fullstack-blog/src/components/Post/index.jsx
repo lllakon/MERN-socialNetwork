@@ -29,14 +29,17 @@ export const Post = ({
 	isFullPost,
 	isLoading,
 	isEditable,
+	onClickRemove,
 }) => {
-	const dispatch = useDispatch()
 	const navigate = useNavigate()
 
-	const onClickRemove = async () => {
-		if (window.confirm('Удалить статью?')) {
-					axios.delete(`/posts/${_id}`)
-					navigate('/')
+	const onClickRemoveHandler = (id) => {
+		if (!isFullPost) onClickRemove(id)
+		if (isFullPost) {
+			if (window.confirm('Удалить статью?')) {
+				axios.delete(`/posts/${_id}`)
+				navigate('/')
+			}
 		}
 	}
 
@@ -53,7 +56,7 @@ export const Post = ({
 							<EditIcon />
 						</IconButton>
 					</Link>
-					<IconButton onClick={onClickRemove} color='secondary'>
+					<IconButton onClick={() => onClickRemoveHandler(_id)} color='secondary'>
 						<DeleteIcon />
 					</IconButton>
 				</div>

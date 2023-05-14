@@ -1,31 +1,27 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import axios from '../../axios'
-
 import { Post, TagsBlock } from '../../components'
 
-import { Grid, Typography } from '@mui/material'
+import { Grid } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchTags } from '../../redux/slices/posts'
 import ServerRequests from '../../API/ServerRequests'
 
 export const PostsByTag = () => {
 	const navigate = useNavigate()
-	const dispatch = useDispatch()
 	const location = useLocation()
 	const userData = useSelector((state) => state.auth.data)
-	const { tags } = useSelector((state) => state.posts)
-
-	const isTagsLoading = tags.status === 'loading'
+	// const { tags } = useSelector((state) => state.posts)
+	// const isTagsLoading = tags.status === 'loading'
 
 	const [postsLoading, setPostsLoading] = useState(true)
 	const [posts, setPosts] = useState([])
 
+	
+
 	useEffect(() => {
-		dispatch(fetchTags())
+
 	}, [])
 
-	console.log(location.pathname)
 	useEffect(() => {
 		setPostsLoading(true)
 		ServerRequests.getPostsByTag(location.pathname)
@@ -58,7 +54,7 @@ export const PostsByTag = () => {
 					)}
 				</Grid>
 				<Grid xs={4} item>
-					<TagsBlock items={tags.items} isLoading={isTagsLoading} />
+					{/* <TagsBlock items={tags.items} isLoading={isTagsLoading} /> */}
 				</Grid>
 			</Grid>
 		</>

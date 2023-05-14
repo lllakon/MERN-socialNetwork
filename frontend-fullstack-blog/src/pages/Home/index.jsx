@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import ServerRequests from '../../API/ServerRequests'
-import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
@@ -11,35 +10,39 @@ import {
 	CircularLoader,
 	EndOfFeed,
 } from '../../components/index'
-import { fetchTags } from '../../redux/slices/posts'
 import { scrollToTop } from '../../helpers/scrollToTop'
 
 import { Tabs, Tab, Grid } from '@mui/material'
-import axios from '../../axios'
 
 export const Home = () => {
 	// TODO: Не обновляются посты при удалении; у tags нет бесконечного скролла; вынести фетч в отдельную функцию?
 	const dispatch = useDispatch()
-	const navigate = useNavigate()
 	const userData = useSelector((state) => state.auth.data)
-	const { tags } = useSelector((state) => state.posts)
 	const [currentPage, setCurrentPage] = useState(1)
 	const [sortedBy, setSortedBy] = useState('new')
 
-	const [postsTotalCount, setPostsTotalCount] = useState(0)
 	const [posts, setPosts] = useState([])
-	const [hasMore, setHasMore] = useState(true)
+	const [postsTotalCount, setPostsTotalCount] = useState(0)
 	const [postsLoading, setPostsLoading] = useState(true)
 	const [postsError, setPostsError] = useState(false)
-	const [deletedPost, setDeletedPost] = useState('')
+	const [hasMore, setHasMore] = useState(true)
+	const [deletedPostId, setDeletedPostId] = useState('')
 
+	const [tags, setTags] = useState([])
+	const [tagsLoading, setTagsLoading] = useState(true)
 
-	// TAGS
-	const isTagsLoading = tags.status === 'loading' || tags.status === 'rejected'
 	useEffect(() => {
-		dispatch(fetchTags())
+		ServerRequests.getPopularTags()
+			.then((res) => {
+				setTags(res.data)
+				setTagsLoading(false)
+				scrollToTop()
+			})
+			.catch((err) => {
+				console.warn(err)
+				setTagsLoading(true)
+			})
 	}, [])
-	//
 
 	useEffect(() => {
 		ServerRequests.getPosts(sortedBy, currentPage)
@@ -55,12 +58,9 @@ export const Home = () => {
 				setPostsError(true)
 				setHasMore(false)
 			})
-	}, [sortedBy, deletedPost])
+	}, [sortedBy, deletedPostId])
 
 	const fetchMorePosts = () => {
-		console.log('fetchMorePosts')
-		console.log(currentPage)
-
 		if (posts.length < postsTotalCount) {
 			ServerRequests.getPosts(sortedBy, currentPage)
 				.then((res) => {
@@ -86,12 +86,11 @@ export const Home = () => {
 		setSortedBy(sortBy)
 	}
 
-	//
 	const removePostHandler = async (id) => {
 		if (window.confirm('Удалить статью?')) {
 			await ServerRequests.removePost(id)
 			setCurrentPage(1)
-			setDeletedPost(id)
+			setDeletedPostId(id)
 		}
 	}
 
@@ -135,7 +134,7 @@ export const Home = () => {
 					)}
 				</Grid>
 				<Grid xs={4} item>
-					<TagsBlock items={tags.items} isLoading={isTagsLoading} />
+					<TagsBlock items={tags} isLoading={tagsLoading} />
 				</Grid>
 			</Grid>
 		</>

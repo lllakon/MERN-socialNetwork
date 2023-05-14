@@ -1,9 +1,7 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
 import clsx from 'clsx'
 
-import { fetchRemovePost } from '../../redux/slices/posts'
 
 import { IconButton } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Clear'
@@ -14,7 +12,7 @@ import styles from './Post.module.scss'
 
 import { UserInfo } from '../UserInfo'
 import { PostSkeleton } from './Skeleton'
-import axios from '../../axios'
+import ServerRequests from '../../API/ServerRequests'
 
 export const Post = ({
 	_id,
@@ -33,11 +31,11 @@ export const Post = ({
 }) => {
 	const navigate = useNavigate()
 
-	const onClickRemoveHandler = (id) => {
+	const onClickRemoveHandler = async (id) => {
 		if (!isFullPost) onClickRemove(id)
 		if (isFullPost) {
 			if (window.confirm('Удалить статью?')) {
-				axios.delete(`/posts/${_id}`)
+				await ServerRequests.removePost(id)
 				navigate('/')
 			}
 		}

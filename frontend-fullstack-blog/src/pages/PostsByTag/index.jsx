@@ -76,7 +76,7 @@ export const PostsByTag = () => {
 		<>
 			<h2>Посты по тегу: {location.pathname.replace('/tags/', '')}</h2>
 			<Grid container spacing={4}>
-				<Grid xs={8} item>
+				<Grid xs={100} item>
 					<InfiniteScroll
 						dataLength={posts.length}
 						next={fetchMorePosts}

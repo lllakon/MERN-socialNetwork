@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import ServerRequests from '../../API/ServerRequests'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import useInfinityFeed from '../../hooks/useInfinityFeed'
 
 import {
 	Post,
@@ -10,57 +11,25 @@ import {
 	CircularLoader,
 	EndOfFeed,
 } from '../../components/index'
-import { scrollToTop } from '../../helpers/scrollToTop'
 
 import { Tabs, Tab, Grid } from '@mui/material'
 
 export const Home = () => {
 	const userData = useSelector((state) => state.auth.data)
-	const [currentPage, setCurrentPage] = useState(1)
-	const [sortedBy, setSortedBy] = useState('new')
 
-	const [posts, setPosts] = useState([])
-	const [postsTotalCount, setPostsTotalCount] = useState(0)
-	const [postsLoading, setPostsLoading] = useState(true)
-	const [postsError, setPostsError] = useState(false)
-	const [hasMore, setHasMore] = useState(true)
-	const [deletedPostId, setDeletedPostId] = useState('')
+	const [sortedBy, setSortedBy] = useState('new')
 
 	const [tags, setTags] = useState([])
 	const [tagsLoading, setTagsLoading] = useState(true)
 
-	useEffect(() => {
-		ServerRequests.getPosts(sortedBy, currentPage)
-			.then((res) => {
-				setPosts(res.data.posts)
-				setPostsTotalCount(res.data.totalPostsCount)
-				setCurrentPage((prev) => prev + 1)
-				setPostsLoading(false)
-				scrollToTop()
-			})
-			.catch((err) => {
-				console.warn(err)
-				setPostsError(true)
-				setHasMore(false)
-			})
-	}, [sortedBy, deletedPostId])
-
-	const fetchMorePosts = () => {
-		if (posts.length < postsTotalCount) {
-			ServerRequests.getPosts(sortedBy, currentPage)
-				.then((res) => {
-					setPosts([...posts, ...res.data.posts])
-					setCurrentPage((prev) => prev + 1)
-				})
-				.catch((err) => {
-					console.warn(err)
-					setPostsError(true)
-					setHasMore(false)
-				})
-		} else if (!postsLoading) {
-			setHasMore(false)
-		}
-	}
+	const {
+		posts,
+		postsLoading,
+		postsError,
+		hasMore,
+		fetchMorePosts,
+		removePostHandler,
+	} = useInfinityFeed(sortedBy)
 
 	useEffect(() => {
 		ServerRequests.getPopularTags()
@@ -74,22 +43,22 @@ export const Home = () => {
 			})
 	}, [])
 
-	const sortPostsBy = (sortBy) => {
-		if (sortedBy === sortBy) return
-		setPostsLoading(true)
-		setHasMore(true)
-		setPosts([])
-		setCurrentPage(1)
-		setSortedBy(sortBy)
-	}
+	// const sortPostsBy = (sortBy) => {
+	// 	if (sortedBy === sortBy) return
+	// 	setPostsLoading(true)
+	// 	setHasMore(true)
+	// 	setPosts([])
+	// 	setCurrentPage(1)
+	// 	setSortedBy(sortBy)
+	// }
 
-	const removePostHandler = async (id) => {
-		if (window.confirm('Удалить статью?')) {
-			await ServerRequests.removePost(id)
-			setCurrentPage(1)
-			setDeletedPostId(id)
-		}
-	}
+	// const removePostHandler = async (id) => {
+	// 	// if (window.confirm('Удалить статью?')) {
+	// 	// 	await ServerRequests.removePost(id)
+	// 	// 	setCurrentPage(1)
+	// 	// 	setDeletedPostId(id)
+	// 	// }
+	// }
 
 	return (
 		<>
@@ -98,8 +67,8 @@ export const Home = () => {
 				value={sortedBy === 'popular' ? 1 : 0}
 				aria-label='basic tabs example'
 			>
-				<Tab label='Новые' onClick={() => sortPostsBy('new')} />
-				<Tab label='Популярные' onClick={() => sortPostsBy('popular')} />
+				<Tab label='Новые' onClick={() => setSortedBy('new')} />
+				<Tab label='Популярные' onClick={() => setSortedBy('popular')} />
 			</Tabs>
 			<Grid container spacing={4}>
 				<Grid xs={8} item>

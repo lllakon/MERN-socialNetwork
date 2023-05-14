@@ -26,6 +26,7 @@ export const PostsByTag = () => {
 	const [hasMore, setHasMore] = useState(true)
 
 	//
+	
 
 	useEffect(() => {
 		ServerRequests.getPostsByTag(location.pathname, currentPage)

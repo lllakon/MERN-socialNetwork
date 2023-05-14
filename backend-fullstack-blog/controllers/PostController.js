@@ -50,7 +50,7 @@ export const getAllPopularPosts = async (req, res) => {
 			totalPostsCount: totalPostsCount,
 		}
 
-			res.json(result)
+		res.json(result)
 	} catch (error) {
 		console.log(error)
 		res.status(500).json({
@@ -194,6 +194,29 @@ export const createPost = async (req, res) => {
 		console.log(error)
 		res.status(500).json({
 			message: 'Не удалось создать статью',
+		})
+	}
+}
+
+export const createDebugPosts = async (req, res) => {
+	try {
+		for (let i = 0; i < 20; i++) {
+			const doc = new PostModel({
+				title: `Random Title ${i}`,
+				text: `Random Text ${i}`,
+				tags: ['random', 'tag', i.toString()],
+				user: req.userId,
+			})
+			await doc.save()
+			console.log(doc)
+		}
+
+
+		res.json({ message: '20 debug posts created' })
+	} catch (error) {
+		console.log(error)
+		res.status(500).json({
+			message: 'Не удалось создать debug статьи',
 		})
 	}
 }

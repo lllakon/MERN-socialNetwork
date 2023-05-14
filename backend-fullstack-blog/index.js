@@ -85,6 +85,13 @@ app.post(
 	handleValidationErrors,
 	PostController.createPost
 )
+// Create 20 fakse posts
+app.post(
+	'/posts/debug/create',
+	checkAuth,
+	handleValidationErrors,
+	PostController.createDebugPosts
+)
 app.patch(
 	'/posts/:id',
 	checkAuth,

@@ -99,9 +99,7 @@ export const PostsByTag = () => {
 						)}
 					</InfiniteScroll>
 				</Grid>
-				<Grid xs={4} item>
-					
-				</Grid>
+				<Grid xs={4} item></Grid>
 			</Grid>
 		</>
 	)

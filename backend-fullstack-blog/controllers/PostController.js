@@ -92,7 +92,9 @@ export const getPopularTags = async (req, res) => {
 
 export const getPostsByTag = async (req, res) => {
 	try {
-		const totalPostsCount = await PostModel.countDocuments()
+		const totalPostsCount = await PostModel.find({
+			tags: req.params.id,
+		}).countDocuments()
 		const postsPerPage = req.query.limit || totalPostsCount
 		const pageNumber = req.query.page || 1
 
@@ -103,9 +105,9 @@ export const getPostsByTag = async (req, res) => {
 			.populate({ path: 'user', select: ['user', 'avatarUrl', 'fullName'] })
 			.exec()
 
-		if (posts.length === 0) {
-			throw new Error('No items found')
-		}
+		// if (posts.length === 0) {
+		// 	throw new Error('No items found')
+		// }
 
 		const result = {
 			posts: posts,

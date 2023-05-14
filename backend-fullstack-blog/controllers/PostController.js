@@ -92,16 +92,27 @@ export const getPopularTags = async (req, res) => {
 
 export const getPostsByTag = async (req, res) => {
 	try {
-		const posts = await PostModel.find()
-			.find({ tags: req.params.id })
-			.populate({ path: 'user', select: ['name', 'avatarUrl', 'fullName'] })
+		const totalPostsCount = await PostModel.countDocuments()
+		const postsPerPage = req.query.limit || totalPostsCount
+		const pageNumber = req.query.page || 1
+
+		const posts = await PostModel.find({ tags: req.params.id })
+			.sort({ createdAt: -1 })
+			.limit(postsPerPage)
+			.skip((pageNumber - 1) * postsPerPage)
+			.populate({ path: 'user', select: ['user', 'avatarUrl', 'fullName'] })
 			.exec()
 
 		if (posts.length === 0) {
 			throw new Error('No items found')
 		}
 
-		res.json(posts.reverse())
+		const result = {
+			posts: posts,
+			totalPostsCount: totalPostsCount,
+		}
+
+		res.json(result)
 	} catch (error) {
 		console.log(error)
 		res.status(404).json({
@@ -212,7 +223,7 @@ export const createDebugPosts = async (req, res) => {
 			const doc = new PostModel({
 				title: `Random Title ${i}`,
 				text: `Random Text ${i}`,
-				tags: ['random', 'tag', i.toString()],
+				tags: ['random', 'tag', `tag${i.toString()}`],
 				user: req.userId,
 			})
 			await doc.save()

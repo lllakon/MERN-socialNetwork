@@ -21,7 +21,6 @@ export const PostsByTag = () => {
 
 	//
 	const [currentPage, setCurrentPage] = useState(1)
-	const [sortedBy, setSortedBy] = useState('new')
 
 	const [postsError, setPostsError] = useState(false)
 	const [hasMore, setHasMore] = useState(true)
@@ -29,35 +28,23 @@ export const PostsByTag = () => {
 	//
 
 	useEffect(() => {
-		setPostsLoading(true)
-		ServerRequests.getPostsByTag(location.pathname)
+		ServerRequests.getPostsByTag(location.pathname, currentPage)
 			.then((res) => {
-				setPosts(res.data)
+				setPosts(res.data.posts)
 				setPostsTotalCount(res.data.totalPostsCount)
+				setCurrentPage((prev) => prev + 1)
 				setPostsLoading(false)
-			})
-			.catch((error) => {
-				console.warn(error)
-				navigate('/')
-			})
-	}, [location])
-
-	useEffect(() => {
-		if (tags.length > 0) return
-		ServerRequests.getPopularTags()
-			.then((res) => {
-				setTags(res.data)
-				setTagsLoading(false)
 			})
 			.catch((err) => {
 				console.warn(err)
-				setTagsLoading(true)
+				setPostsError(true)
+				setHasMore(false)
 			})
-	}, [])
+	}, [location.pathname])
 
 	const fetchMorePosts = () => {
 		if (posts.length < postsTotalCount) {
-			ServerRequests.getPosts(sortedBy, currentPage)
+			ServerRequests.getPostsByTag(location.pathname, currentPage)
 				.then((res) => {
 					setPosts([...posts, ...res.data.posts])
 					setCurrentPage((prev) => prev + 1)
@@ -71,6 +58,19 @@ export const PostsByTag = () => {
 			setHasMore(false)
 		}
 	}
+
+	useEffect(() => {
+		if (tags.length > 0) return
+		ServerRequests.getPopularTags()
+			.then((res) => {
+				setTags(res.data)
+				setTagsLoading(false)
+			})
+			.catch((err) => {
+				console.warn(err)
+				setTagsLoading(true)
+			})
+	}, [])
 
 	return (
 		<>
@@ -100,7 +100,7 @@ export const PostsByTag = () => {
 					</InfiniteScroll>
 				</Grid>
 				<Grid xs={4} item>
-					<TagsBlock items={tags} isLoading={tagsLoading} />
+					
 				</Grid>
 			</Grid>
 		</>

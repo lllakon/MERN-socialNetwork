@@ -17,8 +17,8 @@ export const EndOfFeed = () => {
 				</Link>
 			) : (
 				<div className={styles.notAuthText}>
-					<Link to='/login'>Войдите</Link> или
-					<Link to='/register'>зарегистрируйтесь</Link> чтобы создать свой пост
+					<Link to='/login'>Войдите</Link> или{' '}
+					<Link to='/register'>зарегистрируйтесь</Link> чтобы создать новый пост
 				</div>
 			)}
 		</div>

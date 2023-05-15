@@ -13,6 +13,7 @@ import {
 } from '../../components/index'
 
 import { Tabs, Tab, Grid } from '@mui/material'
+import styles from './Home.module.scss'
 
 export const Home = () => {
 	const userData = useSelector((state) => state.auth.data)
@@ -45,15 +46,15 @@ export const Home = () => {
 	return (
 		<>
 			<Tabs
-				style={{ marginBottom: 15 }}
+				className={styles.tabs}
 				value={sortedBy === 'popular' ? 1 : 0}
 				aria-label='basic tabs example'
 			>
 				<Tab label='Новые' onClick={() => setSortedBy('new')} />
 				<Tab label='Популярные' onClick={() => setSortedBy('popular')} />
 			</Tabs>
-			<Grid container spacing={4}>
-				<Grid xs={8} item>
+			<Grid container spacing={4} className={styles.contentWrapper}>
+				<Grid xs={8} item className={styles.postsFeed}>
 					<InfiniteScroll
 						dataLength={posts.length}
 						next={fetchMorePosts}
@@ -81,7 +82,7 @@ export const Home = () => {
 						<ErrorBlock errorText='Произошла ошибка при загрузке постов 😔' />
 					)}
 				</Grid>
-				<Grid xs={4} item>
+				<Grid xs={4} item className={styles.tagsBlock}>
 					<TagsBlock items={tags} isLoading={tagsLoading} />
 				</Grid>
 			</Grid>

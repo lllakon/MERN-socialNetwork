@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import axios from '../../axios'
 
 import { SideBlock, Comment, AddComment } from '../index'
+import styles from './CommentBlock.module.scss'
 
 import {
 	ListItem,
@@ -74,9 +76,10 @@ export const CommentsBlock = ({ postId }) => {
 					setNewComment={setNewComment}
 				/>
 			) : (
-				<p style={{ textAlign: 'center', padding: '30px 0 45px 0' }}>
-					Войдите или зарегистрируйтесь чтобы оставлять комментарии
-				</p>
+				<div className={styles.notAuthText}>
+					<Link to='/login'>Войдите</Link> или{' '}
+					<Link to='/register'>зарегистрируйтесь</Link> чтобы оставлять комментарии
+				</div>
 			)}
 		</SideBlock>
 	)

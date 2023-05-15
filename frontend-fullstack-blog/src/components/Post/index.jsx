@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import clsx from 'clsx'
+import ServerRequests from '../../API/ServerRequests'
 
 
 import { IconButton } from '@mui/material'
@@ -12,7 +13,6 @@ import styles from './Post.module.scss'
 
 import { UserInfo } from '../UserInfo'
 import { PostSkeleton } from './Skeleton'
-import ServerRequests from '../../API/ServerRequests'
 
 export const Post = ({
 	_id,

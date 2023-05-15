@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import axios from '../../axios'
+import ServerRequests from '../../API/ServerRequests'
 
 export const fetchLogin = createAsyncThunk(
 	'auth/fetchLogin',
 	async (params, { rejectWithValue }) => {
 		try {
-			const { data } = await axios.post('/auth/login', params)
+			const { data } = await ServerRequests.userLogin(params)
 			return data
 		} catch (error) {
 			return rejectWithValue(error.response.data.message)
@@ -17,7 +17,7 @@ export const fetchRegister = createAsyncThunk(
 	'auth/fetchRegister',
 	async (params, { rejectWithValue }) => {
 		try {
-			const { data } = await axios.post('/auth/register', params)
+			const { data } = await ServerRequests.userRegister(params)
 			return data
 		} catch (error) {
 			return rejectWithValue(error.response.data.message)
@@ -25,10 +25,17 @@ export const fetchRegister = createAsyncThunk(
 	}
 )
 
-export const fetchLoginMe = createAsyncThunk('auth/fetchLoginMe', async () => {
-	const { data } = await axios.get('/auth/me')
-	return data
-})
+export const fetchLoginMe = createAsyncThunk(
+	'auth/fetchLoginMe',
+	async (_, { rejectWithValue }) => {
+		try {
+			const { data } = await ServerRequests.getAuth()
+			return data
+		} catch (error) {
+			return rejectWithValue(error.response.data.message)
+		}
+	}
+)
 
 const initialState = {
 	data: null,

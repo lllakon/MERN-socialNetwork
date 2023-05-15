@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import axios from '../../axios'
+import ServerRequests from '../../API/ServerRequests'
 
 import { SideBlock, Comment, AddComment } from '../index'
 import styles from './CommentBlock.module.scss'
@@ -24,8 +24,7 @@ export const CommentsBlock = ({ postId }) => {
 	const [removedComment, setRemovedComment] = useState([])
 
 	useEffect(() => {
-		axios
-			.get(`/comments/${postId}`)
+		ServerRequests.getPostComments(postId)
 			.then((res) => {
 				setComments(res.data)
 				setLoading(false)

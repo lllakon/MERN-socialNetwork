@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import ServerRequests from '../../API/ServerRequests'
 import { useSelector } from 'react-redux'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import useInfinityFeed from '../../hooks/useInfinityFeed'
+import ServerRequests from '../../API/ServerRequests'
 
 import {
 	Post,

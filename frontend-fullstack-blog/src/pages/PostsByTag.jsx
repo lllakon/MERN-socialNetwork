@@ -1,9 +1,9 @@
 import React from 'react'
 import { useLocation } from 'react-router-dom'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import useInfinityFeed from '../../hooks/useInfinityFeed'
+import useInfinityFeed from '../hooks/useInfinityFeed'
 
-import { CircularLoader, EndOfFeed, Post } from '../../components'
+import { CircularLoader, EndOfFeed, Post } from '../components'
 
 import { Grid } from '@mui/material'
 import { useSelector } from 'react-redux'

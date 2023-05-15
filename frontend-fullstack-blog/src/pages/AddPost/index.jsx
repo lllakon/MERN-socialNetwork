@@ -1,13 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import axios from '../../axios'
+import ServerRequests from '../../API/ServerRequests'
 
 import { selectIsAuth } from '../../redux/slices/auth'
 
-import TextField from '@mui/material/TextField'
-import Paper from '@mui/material/Paper'
-import Button from '@mui/material/Button'
+import { TextField, Paper, Button } from '@mui/material'
 import SimpleMDE from 'react-simplemde-editor'
 import { MDEoptions } from './MDEoptions'
 import 'easymde/dist/easymde.min.css'
@@ -32,7 +30,7 @@ export const AddPost = () => {
 			const formData = new FormData()
 			const file = e.target.files[0]
 			formData.append('image', file)
-			const { data } = await axios.post('/upload', formData)
+			const { data } = await ServerRequests.uploadPostImage(formData)
 			setImageUrl(data.url)
 		} catch (error) {
 			console.warn(error)
@@ -65,8 +63,8 @@ export const AddPost = () => {
 			}
 
 			const { data } = isEditing
-				? await axios.patch(`/posts/${id}`, fields)
-				: await axios.post('/posts', fields)
+				? await ServerRequests.editPost(id, fields)
+				: await ServerRequests.createPost(fields)
 
 			const _id = isEditing ? id : data._id
 
@@ -79,8 +77,7 @@ export const AddPost = () => {
 
 	useEffect(() => {
 		if (id) {
-			axios
-				.get(`/posts/${id}`)
+			ServerRequests.getEditingPost(id)
 				.then(({ data }) => {
 					setTitle(data.title)
 					setTags(data.tags.join(',').replace(/,/g, ' '))
@@ -94,12 +91,7 @@ export const AddPost = () => {
 		}
 	}, [])
 
-	const options = useMemo(
-		() => (
-			MDEoptions
-		),
-		[]
-	)
+	const options = useMemo(() => MDEoptions, [])
 
 	const handleTogglePreview = () => {
 		setPreview(!preview)

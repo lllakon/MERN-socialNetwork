@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import axios from '../../axios'
+import ServerRequests from '../../API/ServerRequests'
 
 import { PopupDialog } from '../../components/UI/PopupDialog'
 import { CircularLoader } from '../../components/index'
-// import  {CircularLoader}  from '../../components/UI/CircularLoader'
 
 import styles from './UserProfile.module.scss'
 
@@ -20,7 +19,7 @@ export const UserProfile = () => {
 		}
 
 		try {
-			await axios.patch('/user/avatar', newAvatarData)
+			await ServerRequests.changeAvatar(newAvatarData)
 		} catch (error) {
 			console.warn(error)
 			alert('Не удалось изменить фотографию')
@@ -34,7 +33,7 @@ export const UserProfile = () => {
 		}
 
 		try {
-			await axios.patch('/user/email', newEmailData)
+			await ServerRequests.changeEmail(newEmailData)
 		} catch (error) {
 			console.warn(error)
 			alert('Не удалось изменить email')

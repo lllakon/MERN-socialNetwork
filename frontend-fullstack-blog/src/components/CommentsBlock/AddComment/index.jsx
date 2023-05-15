@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import axios from '../../../axios'
+import ServerRequests from '../../../API/ServerRequests'
 
 import styles from './AddComment.module.scss'
 
@@ -21,7 +21,7 @@ export const AddComment = ({ postId, userData, setNewComment }) => {
 		setNewComment((prevItems) => [...prevItems, newCommentData])
 
 		try {
-			await axios.patch(`/comments/${postId}`, newCommentData)
+			ServerRequests.createComment(postId, newCommentData)
 			setInputValue('')
 		} catch (error) {
 			console.warn(error)

@@ -2,20 +2,20 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown'
-import axios from '../axios'
+import ServerRequests from '../API/ServerRequests'
 
 import { Post, CommentsBlock, ErrorBlock } from '../components/index'
 
 export const FullPost = () => {
 	const { id } = useParams()
 	const userData = useSelector((state) => state.auth.data)
+
 	const [isLoading, setLoading] = useState(true)
 	const [error, setError] = useState(false)
 	const [data, setData] = useState()
 
 	useEffect(() => {
-		axios
-			.get(`/posts/${id}?userId=${userData?._id}`)
+		ServerRequests.getFullPost(id, userData?._id)
 			.then((res) => {
 				setData(res.data)
 				setLoading(false)

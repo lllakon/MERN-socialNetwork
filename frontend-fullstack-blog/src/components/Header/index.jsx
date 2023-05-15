@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { logout, selectIsAuth } from '../../redux/slices/auth'
@@ -7,11 +7,12 @@ import { logout, selectIsAuth } from '../../redux/slices/auth'
 import { Container, Button } from '@mui/material'
 import styles from './Header.module.scss'
 
-import newPostIcon from './img/newPost.svg'
-import userIcon from './img/user.svg'
-import logoutIcon from './img/logout.svg'
+import newPostIcon from './img/newPostIcon.svg'
+import userIcon from './img/userIcon.svg'
+import logoutIcon from './img/logoutIcon.svg'
 
 export const Header = () => {
+	const navigate = useNavigate()
 	const dispatch = useDispatch()
 	const isAuth = useSelector(selectIsAuth)
 
@@ -19,6 +20,7 @@ export const Header = () => {
 		if (window.confirm('Выйти из аккаунта?')) {
 			dispatch(logout())
 			window.localStorage.removeItem('token')
+			navigate('/')
 		}
 	}
 
@@ -38,7 +40,7 @@ export const Header = () => {
 									alt='Написать статью'
 								/>
 							</Link>
-							<Link to="/user">
+							<Link to='/user'>
 								<img
 									className={styles.userIcon}
 									src={userIcon}

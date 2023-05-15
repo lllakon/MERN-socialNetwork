@@ -2,15 +2,13 @@ import { useState, useEffect } from 'react'
 import ServerRequests from '../API/ServerRequests'
 
 const useInfinityFeed = (sortBy, tag = null) => {
+	const [sortedBy, setSortedBy] = useState('')
 	const [posts, setPosts] = useState([])
 	const [postsTotalCount, setPostsTotalCount] = useState(0)
-	const [currentPage, setCurrentPage] = useState(1)
 	const [postsLoading, setPostsLoading] = useState(true)
 	const [postsError, setPostsError] = useState(false)
+	const [currentPage, setCurrentPage] = useState(1)
 	const [hasMore, setHasMore] = useState(true)
-
-	const [sortedBy, setSortedBy] = useState('')
-
 	const [deletedPostId, setDeletedPostId] = useState('')
 
 	const sortPostsBy = (newSort) => {

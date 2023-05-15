@@ -9,7 +9,7 @@ export default class ServerRequests {
 		return response
 	}
 	static async getPostsByTag(tag, currentPage) {
-		const response = await axios.get(`${tag}?limit=8&page=${currentPage}`)
+		const response = await axios.get(`/tags/${tag}?limit=8&page=${currentPage}`)
 		return response
 	}
 	static async removePost(id) {

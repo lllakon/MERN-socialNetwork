@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import ServerRequests from '../API/ServerRequests'
 
-const useInfinityFeed = (sortBy) => {
+const useInfinityFeed = (sortBy, tag = null) => {
 	const [posts, setPosts] = useState([])
 	const [postsTotalCount, setPostsTotalCount] = useState(0)
 	const [currentPage, setCurrentPage] = useState(1)
@@ -9,7 +9,7 @@ const useInfinityFeed = (sortBy) => {
 	const [postsError, setPostsError] = useState(false)
 	const [hasMore, setHasMore] = useState(true)
 
-	const [sortedBy, setSortedBy] = useState('new')
+	const [sortedBy, setSortedBy] = useState('')
 
 	const [deletedPostId, setDeletedPostId] = useState('')
 
@@ -36,14 +36,18 @@ const useInfinityFeed = (sortBy) => {
 	}, [sortBy])
 
 	useEffect(() => {
+		if (!tag && !sortedBy) return
 		setPostsLoading(true)
-		ServerRequests.getPosts(sortedBy, currentPage)
+		const postsRequest = tag
+			? ServerRequests.getPostsByTag(tag, currentPage)
+			: ServerRequests.getPosts(sortedBy, currentPage)
+
+		postsRequest
 			.then((res) => {
 				setPosts(res.data.posts)
 				setPostsTotalCount(res.data.totalPostsCount)
 				setCurrentPage((prev) => prev + 1)
 				setPostsLoading(false)
-
 				window.scrollTo({
 					top: 0,
 					behavior: 'smooth',
@@ -54,12 +58,9 @@ const useInfinityFeed = (sortBy) => {
 				setPostsError(true)
 				setHasMore(false)
 			})
-	}, [sortedBy, deletedPostId])
-
-	console.log('Посты из стейта', posts.length)
+	}, [sortedBy, deletedPostId, tag])
 
 	const fetchMorePosts = () => {
-		console.log('Постов:', posts.length, 'Всего постов:', postsTotalCount)
 		if (posts.length < postsTotalCount) {
 			ServerRequests.getPosts(sortedBy, currentPage)
 				.then((res) => {

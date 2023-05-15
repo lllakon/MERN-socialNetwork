@@ -1,4 +1,3 @@
-import uniq from 'lodash.uniq'
 import filter from 'lodash.filter'
 import includes from 'lodash.includes'
 import { PostModel } from '../models/index.js'
@@ -104,10 +103,6 @@ export const getPostsByTag = async (req, res) => {
 			.skip((pageNumber - 1) * postsPerPage)
 			.populate({ path: 'user', select: ['user', 'avatarUrl', 'fullName'] })
 			.exec()
-
-		// if (posts.length === 0) {
-		// 	throw new Error('No items found')
-		// }
 
 		const result = {
 			posts: posts,

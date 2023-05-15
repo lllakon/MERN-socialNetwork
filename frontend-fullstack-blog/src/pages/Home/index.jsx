@@ -18,7 +18,6 @@ export const Home = () => {
 	const userData = useSelector((state) => state.auth.data)
 
 	const [sortedBy, setSortedBy] = useState('new')
-
 	const [tags, setTags] = useState([])
 	const [tagsLoading, setTagsLoading] = useState(true)
 
@@ -42,23 +41,6 @@ export const Home = () => {
 				setTagsLoading(true)
 			})
 	}, [])
-
-	// const sortPostsBy = (sortBy) => {
-	// 	if (sortedBy === sortBy) return
-	// 	setPostsLoading(true)
-	// 	setHasMore(true)
-	// 	setPosts([])
-	// 	setCurrentPage(1)
-	// 	setSortedBy(sortBy)
-	// }
-
-	// const removePostHandler = async (id) => {
-	// 	// if (window.confirm('Удалить статью?')) {
-	// 	// 	await ServerRequests.removePost(id)
-	// 	// 	setCurrentPage(1)
-	// 	// 	setDeletedPostId(id)
-	// 	// }
-	// }
 
 	return (
 		<>

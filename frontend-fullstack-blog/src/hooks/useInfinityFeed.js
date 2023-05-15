@@ -79,7 +79,6 @@ const useInfinityFeed = (sortBy, tag = null) => {
 
 	return {
 		posts,
-		postsTotalCount,
 		postsLoading,
 		postsError,
 		hasMore,
